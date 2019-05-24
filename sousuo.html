@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/shangpinliebiao.css"/>
+	</head>
+	<style type="text/css">
+		.search{
+			border: 1px solid gainsboro;
+			width: 5rem;
+			height: .5rem;
+			border-radius: .25rem;
+			text-indent: .3rem;
+		}
+		.header-aside{
+			font-size: .3rem;
+			width: 1rem;
+		}
+	</style>
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside mui-action-back">
+					<img src="img/youjian.png"/>
+				</div>
+				<div class="header-text">
+					<input type="text" class="search" placeholder="请输入商品名称"/>
+				</div>
+				<div class="header-aside goto">GO</div>
+			</div>
+			<div class="main">
+				
+			</div>
+		</div>
+	</body>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			$(".goto").click(function(){
+				var search=$(".search").val()
+				if (search=='') {
+					alert("搜索内容不能为空")
+					return
+				}
+				$.ajax({
+					type:"post",
+					url:myurl+"/user/selectSmMerchantByComm",
+					async:true,
+					dataType:'json',
+					data:{
+						smMeShopName:search
+					},
+					success:function(res){
+						if (res.status==200) {
+							$(".main").html('')
+							for (var i in res.data) {
+								$(".main").append(`
+									<div class="main-one" myid='${res.data[i].smCommodityId}'>
+										<div class="one-lift">
+											<img src="${res.data[i].smCoDefaultImg}"/>
+										</div>
+										<div class="one-right">
+											<div class="one-text">${res.data[i].smCoName}</div>			
+										</div>
+									</div>
+								`)
+							}
+						} else{
+							alert(res.msg)
+						}
+					},
+					error:function(err){
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+				$(".main").on('click','.main-one',function(){
+					localStorage.setItem('shangpinxiangqingid', $(this).attr('myid'))
+					mui.openWindow({
+						url: "shangpinxiangqing.html",
+						id: "shangpinxiangqing"
+					})
+				})
+			})
+		})
+	</script>
+</html>

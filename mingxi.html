@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/mingxi.css" />
+	</head>
+	<style type="text/css">
+		.price{color: red;font-weight: 600;font-size: .3rem;}
+	</style>
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside mui-action-back">
+					<img src="img/youjian.png" />
+				</div>
+				<div class="header-text">明细</div>
+				<div class="header-aside"></div>
+			</div>
+			<div class="main">
+				<div class="main-inner">
+					<div class="main-one" v-for="i in mingxishuju">
+						<div class="one-top">
+							<div class="one-text">{{i.smUfPriceStatus | status}}</div>
+							<div class="one-news">{{i.smUfPayStyle | type}}</div>
+						</div>
+						<div class="one-bottom">
+							<div class="one-word">{{i.smUfCreateTimeString}}</div>
+							<div class="one-text price">
+								<block v-if='i.smUfPriceStatus!=1&&i.smUfPriceStatus!=2'>+</block>
+								<block v-if='i.smUfPriceStatus==1||i.smUfPriceStatus==2'>-</block>
+								￥{{i.smUrPrice}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '.wrapper', //选择器对哪一部分使用vue
+			data: { //变量
+				mingxishuju: [],
+				mydata: [],
+				pageSize:1,
+				ajaxstate:false
+			},
+			mounted: function() { //初始化
+				this.myajax()
+			},
+			methods: {
+				mainscroll: function() {
+					if(Math.abs($('.main-inner').offset().top) + $('.main').height() + 100 >= $('.main-inner').height()) {
+						this.pageSize++
+						this.myajax()
+					}
+				},
+				myajax: function() {
+					var that = this
+					if(this.ajaxstate==true){
+						return false;
+					}
+					that.ajaxstate=true
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/selectSmUserWalletDetail",
+						async: true,
+						dataType: 'json',
+						data: {
+							smUserId: localStorage.getItem('id')
+						},
+						success: function(res) {
+							if(res.status == 200) {
+								that.ajaxstate=false
+//								for (var i in res.data.list) {
+									that.mingxishuju=res.data
+//								}
+								
+							} else {
+								alert(res.msg)
+							}
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
+						}
+					});
+				}
+			},
+			filters: {
+				status: function(value) {
+					if(value == 1) {
+						return '购买支付'
+					} else if(value == 2) {
+						return '提现费用'
+					} else if(value == 3) {
+						return '直销收入'
+					} else if(value == 4) {
+						return '代理收入'
+					} else if(value == 5) {
+						return '分红收入'
+					} else if(value == 6) {
+						return '退款收入'
+					}else{
+						return '充值'
+					}
+				},
+				type: function(value) {
+					if(value == 1) {
+						return '已完成'
+					} else if(value == 2) {
+						return '待完成'
+					} else if(value == 3) {
+						return '支付中'
+					}
+				}
+			}
+		})
+	</script>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/zhanghuyue.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-top">
+					<div class="header-aside mui-action-back">
+						<img src="img/y  bai.png" />
+					</div>
+					<div class="header-text">账户余额</div>
+					<div class="header-aside">
+						<div class="header-news" style="white-space: nowrap;">明细</div>
+					</div>
+				</div>
+				<div class="header-bottom">
+					<div class="header-word">账户余额(元)</div>
+					<div class="header-zi">88.00</div>
+				</div>
+			</div>
+            <div class="main">
+            	<div class="main-one renzhengzhongxin">
+            		<div class="one-lift">
+            			<img src="img/bangding.png"/>
+            		</div>
+            		<div class="one-text">绑定支付宝</div>
+            		<div class="one-right">
+            			<img src="img/you-hui.png"/>
+            		</div>
+            	</div>
+            	<div class="main-one chongzhi">
+            		<div class="one-lift">
+            			<img src="img/chongzhi.png"/>
+            		</div>
+            		<div class="one-text">充值</div>
+            		<div class="one-right">
+            			<img src="img/you-hui.png"/>
+            		</div>
+            	</div>
+            	<div class="main-one tixian">
+            		<div class="one-lift">
+            			<img src="img/chongzhi.png"/>
+            		</div>
+            		<div class="one-text">提现</div>
+            		<div class="one-right">
+            			<img src="img/you-hui.png"/>
+            		</div>
+            	</div>
+            </div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			$.ajax({
+				type:"post",
+				url:myurl+"/user/selectSmUserWallet",
+				async:true,
+				dataType:'json',
+				data:{
+					smUserId:localStorage.getItem('id')
+				},
+				success:function(res ){
+					if (res.status==200) {
+						$(".header-zi").html(res.data.smUwPrice)
+					} else{
+						alert(res.msg)
+					}
+				},
+				error:function(err){
+					alert("网络连接失败，请稍后重试")
+				}
+			});
+			$('.header-news').click(function(){
+				mui.openWindow({
+					url:'mingxi.html',
+					id:'mingxi'
+				})
+			})
+			$('.renzhengzhongxin').click(function(){
+				mui.openWindow({
+					url:'renzhengzhongxin.html',
+					id:'renzhengzhongxin'
+				})
+			})
+			$('.chongzhi').click(function(){
+				mui.openWindow({
+					url:'chongzhi.html',
+					id:'chongzhi'
+				})
+			})
+			$('.tixian').click(function(){
+				mui.openWindow({
+					url:'tixian.html',
+					id:'tixian'
+				})
+			})
+		})
+	</script>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/tixian.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside mui-action-back">
+					<img src="img/youjian.png" />
+				</div>
+				<div class="header-text">提现</div>
+				<div class="header-aside"></div>
+			</div>
+			<div class="main">
+				<div class="main-one">
+					<div class="one-box">
+						<div class="one-news">￥</div>
+						<input type="number" v-model="price" placeholder="0.00" />
+					</div>
+				</div>
+				<div class="main-two">
+					<div class="two-text">提现方式</div>
+				</div>
+				<div class="main-three">
+					<div class="three-box" @click="change(1)">
+						<div class="three-text">支付宝</div>
+						<img src="" v-if="state==2" />
+						<img src="./img/xuanzhong (1).png" v-if="state==2" />
+						<img src="./img/xuanzhong.png" v-if="state==1" />
+					</div>
+					<!--<div class="three-box" @click="change(2)">
+						<div class="three-text">微信</div>
+						<img src="./img/xuanzhong (1).png" v-if="state==1" />
+						<img src="./img/xuanzhong.png" v-if="state==2" />
+					</div>-->
+				</div>
+				<div class="main-two" style="display: flex;justify-content: space-between;">
+					<div class="two-text">{{guizedata.smWcrServiceCharge}}%手续费</div>
+				</div>
+			</div>
+			<div class="bottom" :class="price==''?'':'active'" @click="myajax()">
+				<div class="bottom-text">确认提现</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '.wrapper',
+			data: {
+				price: '',
+				state: 1,
+				guizedata: ''
+			},
+			methods: {
+				change: function(index) {
+					this.state = index
+				},
+				myajax: function() {
+					var that = this
+					//					plus.nativeUI.showWaiting()
+					if(this.price == '') {
+						return false;
+					}
+//					if(this.price <= 20) {
+//						alert('最少提现20元')
+//						return false;
+//					}
+					//				提现
+					$.ajax({
+						type: 'post',
+						url: myurl + '/user/userCashWithdrawal',
+						dataType: 'json',
+						data: {
+							price: that.price,
+							smUserId: localStorage.getItem('id'),
+							state: that.state,
+							withdrawPrice: that.price * that.guizedata.smWcrServiceCharge / 100
+						},
+						success: function(res) {
+							if(res.status==200){
+								mui.plusReady(function() {
+									if(plus.webview.getWebviewById('zhanghuyue') != undefined) {
+										plus.webview.getWebviewById('zhanghuyue').reload()
+										plus.webview.getWebviewById('wode').reload()
+									}
+								})
+								mui.back()
+							}else{
+								alert(res.msg)
+							}
+							
+						},
+						error: function(res) {
+							alert('网络连接失败，请检查网络后再试！')
+						}
+					})
+
+				}
+
+			},
+			mounted: function() {
+				var that = this
+				$.ajax({
+					type: 'post',
+					url: myurl + '/user/selectSmWithdrawCashRule',
+					dataType: 'json',
+					success: function(res) {
+						if(res.status == 200) {
+							that.guizedata = res.data
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(res) {
+						alert('网络连接失败，请检查网络后再试！')
+					}
+				})
+			}
+		})
+	</script>
+
+</html>

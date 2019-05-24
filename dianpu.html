@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/dianpu.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-text">
+					<input type="text" placeholder="输入商品"/>
+				</div>
+				<div class="header-aside">
+					搜索
+				</div>
+			</div>
+			<div class="main">
+				<div class="main-box">
+					<div class="main-four">
+						<div class="four-lift">
+							<img src="img/234564.jpg" />
+						</div>
+						<div class="four-right">
+							天然小黄瓜爽肤水天然小黄瓜
+						</div>
+						<div class="four-btn">
+							进入店铺							
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bottom">
+               <div class="bottom-box jump" myid='index'>
+               	   <img src="img/shouye 2.png"/>
+               	   <div class="bottom-news">首页</div>
+               </div>
+                 <div class="bottom-box" >
+               	   <img src="img/shop-active.png"/>
+               	   <div class="bottom-text">店铺</div>
+               </div>
+               <div class="bottom-box jump" myid='fenlei'>
+               	   <img src="img/fenlei 2.png"/>
+               	   <div class="bottom-news">分类</div>
+               </div>
+                 <div class="bottom-box jump" myid='shangjiazhuce'>
+               	   <img src="img/add.png"/>
+               	   <div class="bottom-news">商家</div>
+               </div>
+                <div class="bottom-box jump" myid='wode'>
+               	   <img src="img/wode.png"/>
+               	   <div class="bottom-news">我的</div>
+               </div>              
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			$(".jump").click(function(){
+				var jump=$(this).attr('myid')
+				mui.openWindow({
+					url:""+jump+".html",
+					id:jump
+				})
+			})
+		})
+	</script>
+</html>

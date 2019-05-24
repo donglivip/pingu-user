@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/shangjiazhuce.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside">
+
+				</div>
+				<div class="header-text">商家入驻</div>
+				<div class="header-aside"></div>
+			</div>
+			<div class="main">
+				<div class="main-box">
+					<div class="input-text">
+						<input type="text" placeholder="店铺名字" class="name"/>
+					</div>
+					<div class="input-text">
+						<input type="number" placeholder="手机号" class="phone"/>
+					</div>
+					<div class="input-text">
+						<input type="text" placeholder="密码" class="code"/>
+					</div>
+					<div class="input-text">
+						<input type="text" placeholder="身份证号" class="identity"/>
+					</div>
+					<p>
+						登录即视为同意<strong>《注册协议》</strong>
+					</p>
+				</div>
+				<div class="btn">
+					注册
+				</div>
+			</div>
+			<div class="bottom">
+				<div class="bottom-box jump" myid='index'>
+					<img src="img/shouye 2.png" />
+					<div class="bottom-news">首页</div>
+				</div>
+				<!--<div class="bottom-box jump" myid='dianpu'>
+					<img src="img/shop.png" />
+					<div class="bottom-news">店铺</div>
+				</div>-->
+				<div class="bottom-box jump" myid='fenlei'>
+					<img src="img/fenlei 2.png" />
+					<div class="bottom-news">分类</div>
+				</div>
+				<div class="bottom-box">
+					<img src="img/add-active.png" />
+					<div class="bottom-text">商家</div>
+				</div>
+				<div class="bottom-box jump" myid='wode'>
+					<img src="img/wode.png" />
+					<div class="bottom-news">我的</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			//跳转页面
+			$(".jump").click(function() {
+				var jump = $(this).attr('myid')
+				mui.openWindow({
+					url: "" + jump + ".html",
+					id: jump
+				})
+			})
+			//商家入驻
+			$(".btn").click(function(){
+				var name=$(".name").val()//店铺名字
+				var phone=$(".phone").val()//手机号
+				var code=$(".code").val()//密码
+				var identity=$(".identity").val()//身份证号
+				if (name=='') {
+					alert("店铺名字不能为空")
+					return
+				}
+				if (phone=='') {
+					alert("手机号不能为空")
+					return
+				}
+				if (code=='') {
+					alert("密码不能为空")
+					return
+				}
+				if (identity=='') {
+					alert("身份证号不能为空")
+					return
+				}
+				$.ajax({
+					type:"post",
+					url:myurl+"/user/inserMerchantEntry",
+					async:true,
+					dataType:'json',
+					data:{
+						smMeShopName:name,
+						smMeLegalPhone:phone,
+						smMePassword:code,
+						smMeCardNo:identity,
+						smMeCreateName:localStorage.getItem('id')
+					},
+					success:function(res){
+						if(res.status==200){
+							alert("注册成功，您可以下载商家端登陆！")
+						}else{
+							alert(res.data)
+						}
+					},
+					error:function(err){
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+		})
+	</script>
+</html>

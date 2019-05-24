@@ -1,0 +1,69 @@
+*{padding: 0;margin: 0;}
+html,body,.wrapper{width: 100%;height: 100%;overflow: hidden;}
+.wrapper{
+	background: #FFFFFF;
+}
+.header{
+	height: .96rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: .2rem;
+	padding: 0 .3rem;
+}
+.header-cebian{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: .3rem;
+}
+.header-cebian img{
+	height: .36rem;
+}
+.main{
+	height: calc(100% - .96rem);
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding-bottom: 1rem;
+}
+.main-one{
+	display: flex;
+	align-items: center;
+	line-height: .6rem;
+	height: 1.2rem;
+	overflow: hidden;
+	margin-bottom: .24rem;
+	padding: 0 .3rem;
+}
+.one-text{
+	font-size: .44rem;
+	color: #000000 ;
+	word-break: break-all;
+}
+.main-two{
+	padding: 0 .3rem;
+}
+.two-text{
+	font-size: .24rem;
+	color: #000000 ;
+	margin-bottom: .48rem;
+}
+.main-three{
+	display: flex;
+	align-items: center;
+	line-height: .4rem;
+	height: 1.6rem;
+	overflow: hidden;
+	margin-bottom: .4rem;
+	padding: 0 .3rem;
+}
+.three-text{
+	font-size: .28rem;
+	color: #000000 ;
+	word-break: break-all;
+}
+.main img{
+	width: calc(100% - .6rem);
+	margin-left: .3rem;
+	border-radius: .08rem;
+}

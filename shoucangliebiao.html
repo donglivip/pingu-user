@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/shangpinliebiao.css" />
+		<link rel="stylesheet" type="text/css" href="css/shouye.css"/>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside"></div>
+				<div class="header-text">收藏列表</div>
+				<div class="header-aside"></div>
+			</div>
+			<div class="main" style="height: calc(100% - 1.96rem);">
+
+			</div>
+			<div class="bottom">
+				<div class="bottom-box jump" myid='index'>
+					<img src="img/shouye%202.png" >
+					<div class="bottom-news">首页</div>
+				</div>
+				<!--<div class="bottom-box jump" myid='dianpu'>
+					<img src="img/shop.png" />
+					<div class="bottom-news">店铺</div>
+				</div>-->
+				<div class="bottom-box" >
+					<img src="img/fenlei.png" >
+					<div class="bottom-text">收藏</div>
+				</div>
+				<div class="bottom-box jump" myid='gouwuche'>
+					<img src="img/gouwudai.png" />
+					<div class="bottom-news">购物车</div>
+				</div>
+				<div class="bottom-box jump" myid='wode'>
+					<img src="img/wode.png" />
+					<div class="bottom-news">我的</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			//跳转页面
+			$(".jump").click(function() {
+				var jump = $(this).attr('myid')
+				mui.openWindow({
+					url: "" + jump + ".html",
+					id: jump
+				})
+			})
+			function myajax() {
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/selectSmUserCollection",
+					async: true,
+					dataType: 'json',
+					data: {
+						smUserId: localStorage.getItem('id')
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							$(".main").html('')
+							for(var i in res.data) {
+								$(".main").append(`
+									<div class="main-four" >
+										<div class="four-lift">
+											<img src="${res.data[i].smCoDefaultImg}" />
+										</div>
+										<div class="four-right">
+											<div class="four-text">${res.data[i].smCoName}</div>
+											<div class="four-bottom">
+												<span id='shanchu' myid='${res.data[i].smCoUpdateName}'>
+													删除
+												</span>
+												<span id='chakan' myid='${res.data[i].smCommodityId}'>
+													查看
+												</span>
+											</div>
+										</div>
+									</div>
+								`)
+							}
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			}
+			myajax()
+			$(".main").on('click', '#shanchu', function() {
+				var myid = $(this).attr('myid')
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/deleteSmUserCollection",
+					async: true,
+					dataType: 'json',
+					data: {
+						smUserCollectionId: myid
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							if(res.data == 1) {
+								myajax()
+							} else {
+								alert(res.msg)
+							}
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			$(".main").on('click', '#chakan', function() {
+				var myid = $(this).attr('myid')
+				localStorage.setItem('shangpinxiangqingid', myid)
+				mui.openWindow({
+					url: 'shangpinxiangqing.html'
+				})
+			})
+		})
+	</script>
+
+</html>

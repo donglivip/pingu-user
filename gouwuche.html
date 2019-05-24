@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/gouwuche.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside mui-action-back">
+					<img src="img/youjian.png" />
+				</div>
+				<div class="header-text">购物车</div>
+				<div class="header-aside guanli" style="font-size: .25rem;">
+					<!--管理-->
+				</div>
+			</div>
+			<div class="main">
+				<div class="main-box">
+					<div class="shop-box" v-for="(val,index) in cartdata">
+						<div class="shop-top">
+							<div class="shop-img">
+								<img :src="val.smMeShopImg" />
+							</div>
+							<h2>
+								{{val.smMeShopName}}
+							</h2>
+						</div>
+						<div class="main-one" v-for="(item,index02) in val.list">
+							<div class="one-lift" @click="changeselect(index,index02)">
+								<img src="img/nook.png" v-if="item.selection==0" />
+								<img src="img/ok.png" v-if="item.selection==1" />
+							</div>
+							<div class="one-content">
+								<img :src="item.smCoDefaultImg" />
+							</div>
+							<div class="one-right">
+								<div class="one-top">{{item.smCoName}}</div>
+								<div class="one-top02">{{item.smSbSpec}}</div>
+								<div class="one-bottom">
+									<div class="one-text"> ¥ {{item.smSbPrice}}</div>
+									<div class="one-box">
+										<div class="one-news" @click="remove(item.smShoppingBasketId,item.smSbNum,index,index02)">-</div>
+										<input type="number" :value="item.smSbNum" class="one-word" />
+										<div class="one-news" @click="add(item.smShoppingBasketId,item.smSbNum,index,index02)">+</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="main-two">
+					<div class="two-lift">
+						<div class="box" @click="allchange">
+							<input type='checkbox' class='allradio' /> <span class='raicle'></span>
+						</div>
+						<div class="two-text">全选</div>
+					</div>
+					<div class="two-content">
+						<div class="content-box">
+							<div class="content-text">总计: </div>
+							<div class="content-news">¥<span class="allprice">{{allprice}}</span></div>
+						</div>
+					</div>
+					<div class="two-right">
+						<div class="two-news" v-if="state==0" @click="pay">结算</div>
+						<div class="two-news" v-if="state==1">删除</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '.wrapper',
+			data: {
+				cartdata: [],
+				state: 0,
+				allprice: 0
+			},
+			methods: {
+				pay: function() {
+					//					去除未选中商品
+					for(var i in this.cartdata) {
+						for(var j = this.cartdata[i].list.length; j > 0; j--) {
+							//							判断是否选中
+							if(this.cartdata[i].list[j - 1].selection == 0) {
+								this.cartdata[i].list.splice(j - 1, 1)
+							}
+
+						}
+					}
+					//					去去除空商家
+					for(var j = this.cartdata.length - 1; j >= 0; j--) {
+						if(this.cartdata[j].list.length == 0) {
+							this.cartdata.splice(j, 1)
+						}
+					}
+					if(this.cartdata.length == 0) {
+						plus.nativeUI.toast('您还未选择商品呢！')
+						this.myajax()
+					} else {
+						localStorage.setItem('shopdata', JSON.stringify(this.cartdata))
+						mui.openWindow({
+							url: 'tijiaodingdan.html',
+							id: 'tijiaodingdan'
+						})
+					}
+				},
+				watchprice: function() {
+					this.allprice=0
+					for(var i in this.cartdata) {
+						for(var j in this.cartdata[i].list) {
+							if(this.cartdata[i].list[j].selection ==  1){
+								this.allprice += this.cartdata[i].list[j].smSbPrice * this.cartdata[i].list[j].smSbNum
+							}
+						}
+					}
+				},
+				//				全选
+				allchange: function() {
+					if($('.allradio').is(':checked')) {
+						for(var i in this.cartdata) {
+							for(var j in this.cartdata[i].list) {
+								this.cartdata[i].list[j].selection = 1
+							}
+						}
+					} else {
+						for(var i in this.cartdata) {
+							for(var j in this.cartdata[i].list) {
+								this.cartdata[i].list[j].selection = 0
+							}
+						}
+					}
+					this.watchprice()
+				},
+				//				改变选中
+				changeselect: function(index, index02) {
+					var that = this
+					that.cartdata[index].list[index02].selection == 0 ? that.cartdata[index].list[index02].selection = 1 : that.cartdata[index].list[index02].selection = 0
+					this.watchprice()
+				},
+				//				减少数量
+				remove: function(id, num, index, index02) {
+					var that = this
+					if(parseInt(num) <= 1) {
+						//						删除购物车
+						$.ajax({
+							type: "post",
+							url: myurl + "/user/deleteShoppingCart",
+							async: true,
+							dataType: 'json',
+							data: {
+								smShoppingBasketId: id
+							},
+							success: function(res) {
+								if(res.status == 200) {
+									that.myajax()
+								} else {
+									alert(res.msg)
+								}
+							},
+							error: function(err) {
+								alert("网络连接失败，请稍后重试")
+							}
+						});
+						return false;
+					}
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/updateShoppingCart",
+						async: true,
+						dataType: 'json',
+						data: {
+							smShoppingBasketId: id,
+							smSbNum: parseInt(num) - 1
+						},
+						success: function(res) {
+							if(res.status == 200) {
+								that.cartdata[index].list[index02].smSbNum = parseInt(num) - 1
+							} else {
+								alert(res.msg)
+							}
+							that.watchprice()
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
+						}
+					});
+					
+				},
+				//				增加数量
+				add: function(id, num, index, index02) {
+					var that = this
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/updateShoppingCart",
+						async: true,
+						dataType: 'json',
+						data: {
+							smShoppingBasketId: id,
+							smSbNum: parseInt(num) + 1
+						},
+						success: function(res) {
+							if(res.status == 200) {
+								that.cartdata[index].list[index02].smSbNum = parseInt(num) + 1
+							} else {
+								alert(res.msg)
+							}
+							that.watchprice()
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
+						}
+					});
+				},
+				//				获取购物车
+				myajax: function() {
+					var that = this
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/selectShoppingCart",
+						async: true,
+						dataType: 'json',
+						data: {
+							smUserId: localStorage.getItem('id')
+						},
+						success: function(res) {
+							if(res.status == 200) {
+								//用于显示数据
+								that.cartdata = res.data
+							} else {
+								alert(res.msg)
+							}
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
+						}
+					});
+				}
+			},
+			mounted: function() {
+				this.myajax()
+			}
+		})
+		//跳转页面-分类
+		$(".fenlei").click(function() {
+			mui.openWindow({
+				url: 'fenlei.html',
+				id: 'fenlei'
+			})
+		})
+		//跳转页面-首页
+		$(".shouye").click(function() {
+			mui.openWindow({
+				url: 'index.html',
+				id: 'index'
+			})
+		})
+		//跳转页面-我的
+		$(".wode").click(function() {
+			mui.openWindow({
+				url: 'wode.html',
+				id: 'wode'
+			})
+		})
+	</script>
+
+</html>

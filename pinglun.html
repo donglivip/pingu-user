@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/shangpinxiangqing.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="main">
+				<div class="main-four">
+					<div class="four-top">
+						<img src="img/youjian.png" class="mui-action-back"/>
+						<div class="four-text" style="flex: 1;">商品评价({{pingjiadata.length}})</div>
+					</div>
+					<block v-for='val in pingjiadata' v-if="pingjiadata.length!=0">
+						<div class="four-content">
+							<div class="img-hezi">
+								<img :src="val.smUsHeadimg" v-if="val.smUsHeadimg!=null"/>
+								<img src="./img/945421.jpg" v-if="val.smUsHeadimg==null"/>
+							</div>
+							<div class="four-news">{{val.smUsNickname==null?'新用户':val.smUsNickname}} </div>
+						</div>
+						<div class="four-bottom" v-if="pingjiadata.length!=0">
+							<div class="four-upper">{{val.smCeResult}}</div>
+							<div class="four-lower">
+								<div class="img-box" v-if="val.smCeImgOne!=null">
+									<img :src="val.smCeImgOne" />
+								</div>
+								<div class="img-box" v-if="val.smCeImgTwo!=null">
+									<img :src="val.smCeImgTwo" />
+								</div>
+								<div class="img-box" v-if="val.smCeImgThree!=null">
+									<img :src="val.smCeImgThree" />
+								</div>
+								<div class="img-box" v-if="val.smCeImgFour!=null">
+									<img :src="val.smCeImgFour" />
+								</div>
+							</div>
+						</div>
+					</block>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var vue=new Vue({
+			el:'.wrapper',
+			data:{
+				pingjiadata:[],
+			},
+			methods:{
+				myajax:function(){
+					var that=this
+					//					获取商品评价
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/selectCommodityDetails",
+						async: true,
+						dataType: 'json',
+						data: {
+							smCommodityId: localStorage.getItem('shangpinxiangqingid')
+						},
+						success: function(res) {
+							if(res.status == 200) {
+								that.pingjiadata=res.data.listSmCommodityEvaluate
+							} else {
+								alert(res.msg)
+							}
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
+						}
+					});
+				}
+			},
+			mounted:function(){
+				this.myajax()
+			}
+		})
+	</script>
+</html>

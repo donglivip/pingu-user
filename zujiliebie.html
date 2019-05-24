@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/shangpinliebiao.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside mui-action-back">
+					<img src="img/youjian.png" />
+				</div>
+				<div class="header-text">足迹列表</div>
+				<div class="header-aside"></div>
+			</div>
+			<div class="main">
+
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			function myajax() {
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/selectSmUserFootprint",
+					async: true,
+					dataType: 'json',
+					data: {
+						smUserId: localStorage.getItem('id')
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							$(".main").html('')
+							for(var i in res.data) {
+								$(".main").append(`
+									<div class="main-one">
+										<div class="one-lift">
+											<img src="${res.data[i].smCoDefaultImg}"/>
+										</div>
+										<div class="one-right">
+											<div class="one-text">${res.data[i].smCoName}</div>
+											<div class="one-news">
+												<span class='shanchu' myid='${res.data[i].smCoUpdateName}'>删除</span>	
+												<span class='chakan' myid='${res.data[i].smCommodityId}'>查看</span>	
+											</div>
+										</div>
+									</div>
+								`)
+							}
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+				$(".main").on('click', '.shanchu', function() {
+					var myid = $(this).attr('myid')
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/deleteSmUserFootprint",
+						async: true,
+						dataType: 'json',
+						data: {
+							smUserFootprintId: myid
+						},
+						success: function(res) {
+							if(res.status == 200) {
+								myajax()
+							} else {
+								alert(res.msg)
+							}
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
+						}
+					});
+					
+				})
+			}
+			$(".main").on('click', '.chakan', function() {
+				var myid = $(this).attr('myid')
+				localStorage.setItem('shangpinxiangqingid', myid)
+				mui.openWindow({
+					url: 'shangpinxiangqing.html'
+				})
+			})
+			myajax()
+		})
+	</script>
+
+</html>

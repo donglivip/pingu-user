@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/dingdanxiangqing0.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-cebian mui-action-back">
+					<img src="img/youjian.png" />
+				</div>
+				<div class="header-text">订单详情</div>
+				<div class="header-cebian"></div>
+			</div>
+			<div class="main">
+				<div class="main-one">
+					<div class="one-box">
+						<div class="one-text">订单地址：</div>
+						<div class="one-text">{{orderdata.address}}</div>
+					</div>
+					<div class="one-hezi">
+						<div class="one-text">联系人：{{orderdata.phone}}</div>
+						<div class="one-text">{{orderdata.name}}</div>
+					</div>
+				</div>
+				<div class="main-box">
+					<div class="box-top">
+						<div class="box-text">{{orderdata.smMeShopName}}</div>
+					</div>
+					<div class="box-box" v-for="val in orderdata.list" @click="opennew(val.smCommodityId)">
+						<div class="box-left">
+							<img :src="val.smCoDefaultImg" />
+						</div>
+						<div class="box-content">
+							<div class="box-above">{{val.smCoName}}</div>
+							<div class="box-below">
+								{{val.smSbSpec}}
+							</div>
+						</div>
+						<div class="box-right">
+							x{{val.smSbNum}}<br />{{val.smSbPrice}}
+						</div>
+					</div>
+				</div>
+				<div class="main-two">
+					<div class="two-text">订单运费:</div>
+					<div class="two-news">￥{{orderdata.smOrFreight}}</div>
+				</div>
+				<div class="main-two">
+					<div class="two-text">订单总价:</div>
+					<div class="two-news">￥{{orderdata.sumPrice}}</div>
+				</div>
+			</div>
+			<!--<div class="bottom">
+				<div class="bottom-text">取消订单</div>
+				<div class="bottom-word"></div>
+				<div class="bottom-news">联系师傅</div>
+				<div class="bottom-news">完成订单</div>
+			</div>-->
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '.wrapper',
+			data: {
+				orderdata:{}
+			},
+			methods: {
+				opennew:function(id){
+					localStorage.setItem('shangpinxiangqingid',id)
+					mui.openWindow({
+						url:'shangpinxiangqing.html'
+					})
+				},
+				myajax: function() {
+					var that = this
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/selectSmOrderIdOrderDetails",
+						async: true,
+						data:{
+							smOrderId:localStorage.getItem('orderid')
+						},
+						dataType: 'json',
+						success: function(res) {
+							if(res.status == 200) {
+								that.orderdata=res.data
+							} else {
+								alert(res.msg)
+							}
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
+						}
+					});
+				}
+			},
+			mounted: function() {
+				this.myajax()
+			}
+		})
+	</script>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/mui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/newlist.css"/>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="wrapper">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-pull-left">
+					<img src="img/Group%2026.png" style="height: .4rem;margin-top: .3rem;">
+				</a>
+				<h1 class="mui-title">新闻列表</h1>
+			</header>
+			<div class="main">
+				<div class="nav">
+					<div class="nav-inner">
+						<div class="nav-title" v-for="(val,index) in topdata" @click="topchange(val.smNewsTypeId,index)" :class="myindex==index?'active':''">
+							{{val.smNewsTypeName}}
+						</div>
+					</div>
+				</div>
+				<div class="detail">
+					<div class="box" v-for="val in detaildata">
+						<div class="title">
+							{{val.smNeTitle}}
+						</div>
+						<div class="text" v-html="val.smNeResult">
+							
+						</div>
+						<div class="bottom">
+							<div class="name">
+								
+							</div>
+							<div class="time">
+								{{val.smNeCreateTimeString}}
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		new Vue({
+			el:'.wrapper',
+			data:{
+				topdata:[],
+				detaildata:[],
+				myindex:0
+			},
+			methods:{
+				myajax:function(){
+					var that=this
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/querySmNewsTypeHomePage",
+						async: true,
+						dataType: 'json',
+						success: function(res) {
+							if(res.status == 200) {
+								that.topdata=res.data
+								that.topchange(res.data[0].smNewsTypeId,0)
+							} else {
+								alert(res.msg)
+							}
+						},
+						error: function(err) {
+							
+						}
+					});
+				},
+				topchange:function(id,index){
+					var that=this
+					that.myindex=index
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/querySmNewsByType",
+						async: true,
+						data:{
+							smNewsTypeId:id
+						},
+						dataType: 'json',
+						success: function(res) {
+							if(res.status == 200) {
+								that.detaildata=res.data
+							} else {
+								alert(res.msg)
+							}
+						},
+						error: function(err) {
+							
+						}
+					});
+				}
+			},
+			mounted:function(){
+				this.myajax()
+			}
+		})
+	</script>
+</html>

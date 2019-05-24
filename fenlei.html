@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/fenlei.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside"></div>
+				<div class="header-text">分类</div>
+				<div class="header-aside"></div>
+			</div>
+			<div class="main">
+				<div class="main-lift">
+
+				</div>
+				<div class="main-right">
+					<div class="right-box">
+						<div class="right-bottom">
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bottom">
+				<div class="bottom-box jump" myid='index'>
+					<img src="img/shouye 2.png" />
+					<div class="bottom-news">首页</div>
+				</div>
+				<!--<div class="bottom-box jump" myid='dianpu'>
+					<img src="img/add.png" />
+					<div class="bottom-news">店铺</div>
+				</div>-->
+				<div class="bottom-box">
+					<img src="img/fenlei.png" />
+					<div class="bottom-text">分类</div>
+				</div>
+				<div class="bottom-box jump" myid='shangjiazhuce'>
+					<img src="img/add.png" />
+					<div class="bottom-news">商家</div>
+				</div>
+				<div class="bottom-box jump" myid='wode'>
+					<img src="img/wode.png" />
+					<div class="bottom-news">我的</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			//跳转页面
+			$(".jump").click(function() {
+				var jump = $(this).attr('myid')
+				mui.openWindow({
+					url: "" + jump + ".html",
+					id: jump
+				})
+			})
+			//查询所有一级分类
+			$.ajax({
+				type: "post",
+				url: myurl + "/user/selectSmShopTypeOne",
+				async: true,
+				dataType: 'json',
+				success: function(res) {
+					if(res.status == 200) {
+						for(var i in res.data) {
+							$(".main-lift").append(`
+								<div class="lift-text" myid='${res.data[i].smShopTypeId}'>${res.data[i].smStName}</div>
+							`)
+						}
+						$('.lift-text').eq(0).click()
+					} else {
+						alert(res.msg)
+					}
+				},
+				error: function(err) {
+					alert("网络连接失败，请稍后重试")
+				}
+			});
+			$(".main-lift").on('click', '.lift-text', function() {
+				$(".lift-text").removeClass('selection')
+				$(this).addClass('selection')
+				var myid = $(this).attr('myid')
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/selectSmShopTypeTwo",
+					async: true,
+					dataType: 'json',
+					data: {
+						smStPpid: myid
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							$(".right-bottom").html('')
+							for(var i in res.data) {
+								$(".right-bottom").append(`
+								<div class="right-status" myid='${res.data[i].smShopTypeId}'>
+									<img src="${myurl + res.data[i].smStOneTypeImg}" />
+									<div class="right-news">${res.data[i].smStName}</div>
+								</div>
+							`)
+							}
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			$(".right-bottom").on('click','.right-status',function(){
+				localStorage.setItem('dianpuliebiaoid',$(this).attr('myid'))
+				mui.openWindow({
+					url:'dianpuliebiao.html',
+					id:'dianpuliebiao'
+				})
+			})
+		})
+	</script>
+
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/swiper.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/shouye.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside city">
+					未知
+				</div>
+				<div class="header-text jump" myid='sousuo'>
+					<input type="text" placeholder="搜索商品" readonly="readonly" />
+				</div>
+				<div class="header-aside">
+					<!--<img src="img/news.png" />-->
+				</div>
+			</div>
+			<div class="main">
+				<div class="swiper-container main-one">
+					<div class="swiper-wrapper">
+
+					</div>
+					<!-- 如果需要分页器 -->
+					<div class="swiper-pagination"></div>
+				</div>
+				<div class="nav">
+
+				</div>
+				<!-- 新闻 -->
+				<div class="new">
+					<span class="red">同城</span>
+					<span>头条</span>
+					<div class="new-box">
+
+					</div>
+				</div>
+				<div class="main-two">
+					<div class="two-text">广告区</div>
+				</div>
+				<div class="main-three">
+
+				</div>
+				<div class="main-two">
+					<div class="two-text">为你推荐</div>
+				</div>
+				<div class="main-box">
+
+				</div>
+			</div>
+			<div class="bottom">
+				<div class="bottom-box">
+					<img src="img/shouye.png" />
+					<div class="bottom-text">首页</div>
+				</div>
+				<!--<div class="bottom-box jump" myid='dianpu'>
+					<img src="img/shop.png" />
+					<div class="bottom-news">店铺</div>
+				</div>-->
+				<div class="bottom-box jump" myid='shoucangliebiao'>
+					<img src="img/fenlei 2.png" />
+					<div class="bottom-news">收藏</div>
+				</div>
+				<div class="bottom-box jump" myid='gouwuche'>
+					<img src="img/gouwudai.png" />
+					<div class="bottom-news">购物车</div>
+				</div>
+				<div class="bottom-box jump" myid='wode'>
+					<img src="img/wode.png" />
+					<div class="bottom-news">我的</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			function plusReady() {
+				plus.navigator.setStatusBarBackground('#F55353');
+				if (localStorage.getItem('id') == undefined || localStorage.getItem('id') == null) {
+					mui.openWindow({
+						url: 'denglu.html',
+						id: 'denglu'
+					})
+				}
+				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/selectSmVersionUpgrade",
+						dataType: 'json',
+						data: {
+							num: 1
+						},
+						success: function(res) {
+							if (res.data.smVuVersion != inf.version) {
+								//								版本更新
+								plus.nativeUI.toast("正在为您更新资源~");
+								plus.downloader.createDownload(myurl + res.data.smVuUrl, {
+									filename: "_doc/update/"
+								}, function(d, status) {
+									if (status == 200) {
+										plus.runtime.install(d.filename, {}, function() {
+											plus.nativeUI.alert("应用资源更新完成！点击重启！", function() {
+												plus.runtime.restart();
+											});
+										}, function(e) {
+											alert("安装更新包失败[" + e.code + "]：" + e.message);
+										});
+									} else {
+										plus.nativeUI.closeWaiting();
+										alert("下载更新包失败！");
+									}
+								}).start();
+							}
+						},
+						error: function(err) {
+							alert(JSON.stringify(err))
+						}
+					});
+				});
+			}
+			if (window.plus) {
+				plusReady();
+			} else {
+				document.addEventListener("plusready", plusReady, false);
+			}
+			//查询首页新闻
+			$.ajax({
+				type: "post",
+				url: myurl + "/user/querySmNewsHomePage",
+				async: true,
+				dataType: 'json',
+				success: function(res) {
+					if (res.status == 200) {
+						$(".new-box").append(
+							`
+									<div class="news">
+										${res.data[0].smNeTitle}
+									</div>
+								`)
+					} else {
+						alert(res.msg)
+					}
+				},
+				error: function(err) {
+
+				}
+			});
+			//查询所有一级分类
+			$.ajax({
+				type: "post",
+				url: myurl + "/user/selectSmShopTypeOne",
+				async: true,
+				dataType: 'json',
+				success: function(res) {
+					if (res.status == 200) {
+						for (var i in res.data) {
+							$(".nav").append(
+								`
+								<div class="nav-box" myid="${res.data[i].smShopTypeId}">
+									<div class="img-box">
+										<img src="${myurl + res.data[i].smStOneTypeImg}" />
+									</div>
+									<span>
+										${res.data[i].smStName}
+									</span>
+								</div>
+							`
+							)
+						}
+					} else {
+						alert(res.msg)
+					}
+				},
+				error: function(err) {
+
+				}
+			});
+			$('.new').click(function() {
+				mui.openWindow({
+					url: "newlist.html",
+					id: "newlist"
+				})
+			})
+			$(".nav").on('click', '.nav-box', function() {
+				localStorage.setItem('navid', $(this).attr('myid'))
+				mui.openWindow({
+					url: "nav03.html",
+					id: "nav03"
+				})
+			})
+			//获取轮播图
+			$.ajax({
+				type: "post",
+				url: myurl + "/user/querySmBannerHomePage",
+				async: true,
+				dataType: 'json',
+				success: function(res) {
+					if (res.status == 200) {
+						for (var i in res.data) {
+							$('.swiper-wrapper').append(
+								`
+								<div class="swiper-slide" id='${res.data[i].smBaUrl}'>
+									<img src="${myurl + res.data[i].smBaImg}" />
+								</div>
+							`
+							)
+						}
+						var swiper = new Swiper('.swiper-container', {
+							pagination: {
+								el: '.swiper-pagination'
+							},
+							autoplay: true
+						});
+						$('.swiper-slide').click(function() {
+							var id = $(this).attr('id')
+							localStorage.setItem('storeinfoid', id)
+							mui.openWindow({
+								url: 'store.html'
+							})
+						})
+					} else {
+						alert(res.msg)
+					}
+				},
+				error: function(err) {
+
+				}
+			});
+			//获取首页广告位置的店铺
+			$.ajax({
+				type: "post",
+				url: myurl + "/user/selectSmMerchantHomePageAdvertisement",
+				async: true,
+				dataType: 'json',
+				success: function(res) {
+					if (res.status == 200) {
+						for (var i in res.data) {
+							$(".main-three").append(
+								`
+								<div class="three-box" myid="${res.data[i].smMerchantId}">
+									<img src="${res.data[i].smMeShopImg}" />
+									<div class="three-text">${res.data[i].smMeShopName}</div>
+								</div>
+							`
+							)
+						}
+					} else {
+						alert(res.msg)
+					}
+				},
+				error: function(err) {
+
+				}
+			});
+			$(".main-three").on('click', '.three-box', function() {
+				localStorage.setItem('storeinfoid', $(this).attr('myid'))
+				mui.openWindow({
+					url: "store.html",
+					id: "store"
+				})
+			})
+			//获取首页为你推荐
+			$.ajax({
+				type: "post",
+				url: myurl + "/user/selectSmMerchantRecommend",
+				async: true,
+				dataType: 'json',
+				success: function(res) {
+					if (res.status == 200) {
+						for (var i in res.data) {
+							$(".main-box").append(
+								`
+								<div class="main-four" myid="${res.data[i].smMerchantId}">
+									<div class="four-lift">
+										<img src="${res.data[i].smMeShopImg}" />
+									</div>
+									<div class="four-right">
+										<div class="four-text">${res.data[i].smMeShopName}</div>
+									</div>
+								</div>
+							`
+							)
+						}
+					} else {
+						alert(res.msg)
+					}
+				},
+				error: function(err) {
+
+				}
+			});
+			$(".main-box").on('click', '.main-four', function() {
+				localStorage.setItem('storeinfoid', $(this).attr('myid'))
+				mui.openWindow({
+					url: "store.html",
+					id: "store"
+				})
+			})
+			//跳转页面
+			$(".jump").click(function() {
+				var jump = $(this).attr('myid')
+				mui.openWindow({
+					url: "" + jump + ".html",
+					id: jump
+				})
+			})
+			mui.plusReady(function() {
+				plus.geolocation.getCurrentPosition(function(p) {
+					$('.city').html(p.address.city)
+				}, function(e) {
+					alert('定位失败，请检查网络和GPS后重试！')
+				});
+			})
+		})
+	</script>
+
+</html>

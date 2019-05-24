@@ -1,0 +1,219 @@
+*{padding: 0;margin: 0;}
+html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
+.wrapper{
+	background: #ffffff;
+}
+.header{
+	height: .96rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding:  0 .3rem;
+}
+.header-aside{
+	width: .3rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: .24rem;
+	white-space: nowrap;
+}
+.nav-box{
+	display: flex;
+	flex-wrap: wrap;
+}
+.img-box{width: .9rem;height: .9rem;overflow: hidden;margin-bottom: .1rem;}
+.img-box img{width: 100%;height: 100%;}
+.nav-box{width: 20%;display: flex;flex-direction: column;align-items: center;justify-content: center;margin: .1rem 0;font-size: .26rem;}
+.nav{display: flex;flex-wrap: wrap;}
+.header-text input{color: #929292;font-size: .24rem;width: 5rem;height: .6rem;border-radius: .3rem;box-shadow: 0 0 3px 3px ghostwhite;border: 0;text-align: center;}
+.header-aside img{
+	height: .4rem;
+}
+.header-text{
+	font-size: .36rem;
+	color: #000000 ;
+}
+.main{
+	height: calc(100% - 2.1rem);
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+.main-one{
+	height: 3.2rem;
+	width: 100%;
+	overflow: hidden;	
+	margin: .2rem 0;
+}
+.main-one img{
+	width: 100%;
+	border-radius: .12rem;
+	height: 100%;
+}
+.main-two{
+	height: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 .3rem;
+}
+.two-text{
+	font-size: .32rem;
+	color: #000000 ;
+	border-left: 3px solid #F55353;
+	padding-left: .12rem;
+	font-weight: 600  ;
+}
+.main-two img{
+	height: .36rem;
+}
+.main-three{
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+.three-box{
+	width: 3.5rem;
+	margin: .05rem;
+}
+.three-box img{
+	height: 2.1rem;
+	width: 3.5rem;
+	border-radius:.05rem ;
+}
+.three-text{
+	font-size: .28rem;
+	color: #000000 ;
+}
+.three-hezi{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	height: .5rem;
+}
+.three-news{
+	font-size: .2rem;
+	color: #FF001F ;
+	margin-right: .1rem;
+}
+.three-word{
+	font-size: .2rem;
+	color: #767676 ;
+	text-decoration: line-through;
+}
+.main-four{
+	height: 2.4rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 0 .3rem;
+}
+.four-lift{
+	height: 2.1rem;
+	width: 2.1rem;
+	overflow: hidden;
+	margin-right: .4rem;
+}
+.four-lift img{
+	width: 100%;
+	border-radius: .05rem;
+	height: 100%;
+}
+.four-right{
+	height: 2.1rem;
+	width: 4rem;
+	
+}
+.four-bottom{
+	display: flex;
+	font-size: .32rem;
+	color: #F55353;
+	margin-top: .7rem;
+}
+.four-bottom span{margin-right: .4rem;}
+.four-text{
+	font-size: .28rem;
+	color: #141414 ;
+	height: 1rem;
+	line-height: .5rem;
+	overflow: hidden;
+}
+.four-box{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	height: .5rem;
+	margin-top: .7rem;
+}
+.four-news{
+	font-size: .2rem;
+	color: #FF001F ;
+	margin-right: .1rem;
+}
+.four-word{
+	font-size: .2rem;
+	color: #4A4A4A ;
+	text-decoration: line-through;
+}
+.bottom{
+	height: 1.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+.bottom-box{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.bottom-box img{
+	height: .4rem;
+	margin-bottom: .08rem;
+}
+.bottom-text{
+	font-size: .2rem;
+	color: #F55353 ;
+}
+.bottom-news{
+	font-size: .2rem;
+	color: #4A4A4A  ;
+}
+
+.swiper-pagination-bullet{
+	background: #FF8686 ;
+	width: .15rem;
+	height: .06rem;
+}
+.swiper-pagination-bullet-active{
+	background: #F55353 ;
+	width: .3rem;
+	height: .06rem;
+}
+.new{
+	display: flex;
+	border-top: 5px solid ghostwhite;
+	border-bottom: 5px solid ghostwhite;
+}
+.new img{
+	height: .8rem;
+	margin: .2rem .3rem;
+}
+.new-box{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.news{
+	height: .4rem;
+	font-size: .22rem;
+	line-height: .4rem;
+	overflow: hidden;
+}
+.new span{font-size: .22rem;font-weight: 600;padding:.1rem;margin: .1rem 0;}
+.new .red{background: #F55353;color: #FFFFFF;border-radius: .1rem;margin-left: .2rem;}
+.new-box{margin-left: .2rem;}
+
+

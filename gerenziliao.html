@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/gerenziliao.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside mui-action-back">
+					<img src="img/youjian.png" />
+				</div>
+				<div class="header-text">个人资料</div>
+				<div class="header-aside back" style="font-size: .2rem;white-space: nowrap;padding-right: .2rem;">
+					退出登录
+				</div>
+			</div>
+			<div class="main">
+				<div class="main-box">
+					<div class="main-top">
+						<div class="img-box">
+							<img src="img/2354564.jpg" class="touxaing" />
+						</div>
+						<div class="top-text"></div>
+					</div>
+					<div class="main-content">
+						<div class="content-lift">修改名字</div>
+						<input type="text" placeholder="请输入用户名" class="name" />
+					</div>
+				</div>
+			</div>
+			<div class="btn">
+				提交修改
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			var imgurl = ''
+			$('.back').click(function(){
+				localStorage.clear()
+				mui.openWindow({
+					url:'denglu.html'
+				})
+			})
+			$('.btn').click(function() {
+				var ajaxjson = {
+					smUserId: localStorage.getItem('id'),
+					smUsHeadimg: imgurl,
+					smUsNickname: $('.name').val()
+				}
+				if(imgurl == '') {
+					delete ajaxjson.smUsHeadimg
+				}
+				if($('.name').val() == '') {
+					delete ajaxjson.smUsNickname
+				}
+				if($('.name').val() == '' && imgurl == '') {
+					return false;
+				}
+
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/updateSmUser",
+					async: true,
+					dataType: 'json',
+					data: ajaxjson,
+					success: function(res) {
+						if(res.status == 200) {
+							if($('.name').val() != '') {
+								localStorage.setItem('name', $('.name').val()) //昵称
+							}
+							if(imgurl != '') {
+								localStorage.setItem('smUsHeadimg', imgurl) //昵称
+							}
+							plus.webview.getWebviewById('wode').reload()
+							plus.webview.getWebviewById('shezhi').reload()
+							mui.back()
+						} else {
+							alert(res.data)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			//			替换头像
+			if(localStorage.getItem('smUsHeadimg') != 'null') {
+				$('.touxaing').attr('src', myurl + localStorage.getItem('smUsHeadimg'))
+			}
+			//			替换名字
+			if(localStorage.getItem('name') != 'null') {
+				$('.name').val(localStorage.getItem('name'))
+			}
+			$('.touxaing').click(function() {
+				upload()
+			})
+
+			function upload(target) {
+				var that = this
+				var btnArray = [{
+					title: "照相机"
+				}, {
+					title: "相册"
+				}]; //选择按钮  1 2 3
+				plus.nativeUI.actionSheet({
+					title: "请选择",
+					cancel: "取消",
+					buttons: btnArray
+				}, function(e) {
+					var index = e.index;
+					switch(index) {
+						case 1:
+							camera();
+							break;
+						case 2:
+							album();
+							break;
+					}
+				});
+			}
+
+			function camera() {
+				//				相机
+				var that = this
+				var cmr = plus.camera.getCamera();
+				cmr.captureImage(function(p) {
+					//成功
+					plus.io.resolveLocalFileSystemURL(p, function(entry) {
+						var img_name = entry.name;
+						var img_path = entry.toLocalURL();
+						$('.touxaing').attr('src', img_path)
+						upload_img(img_path)
+					}, function(e) {
+						alert("读取拍照文件错误：" + e.message);
+					});
+
+				}, function(e) {
+					alert("失败：" + e.message);
+				}, {
+					filename: '_doc/camera/',
+					index: 1
+				});
+			}
+
+			function album() {
+				//				相册
+				var that = this
+				plus.gallery.pick(function(path) {
+					$('.touxaing').attr('src', path)
+					upload_img(path);
+				}, function(e) {
+					alert("取消选择图片");
+				}, {
+					filter: "image"
+				});
+			}
+
+			function upload_img(p) {
+				var thats = this
+				var img = new Image();
+				img.src = p; // 传过来的图片路径在这里用。
+				img.onload = function() {
+					var that = this;
+					//生成比例 
+					var w = that.width,
+						h = that.height,
+						scale = w / h;
+					w = 480 || w; //480  你想压缩到多大，改这里
+					h = w / scale;
+
+					//生成canvas
+					var canvas = document.createElement('canvas');
+					var ctx = canvas.getContext('2d');
+					$(canvas).attr({
+						width: w,
+						height: h
+					});
+					ctx.drawImage(that, 0, 0, w, h);
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/inserSmApplyMemberImage",
+						async: true,
+						dataType: 'json',
+						data: {
+							imgStr: canvas.toDataURL('image/jpeg', 1 || 0.8)
+						},
+						success: function(res) {
+							if(res.status == 200) {
+								imgurl = res.data
+							} else {
+								alert(res.data)
+							}
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
+						}
+					});
+				}
+			}
+		})
+	</script>
+
+</html>

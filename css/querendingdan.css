@@ -1,0 +1,270 @@
+*{padding: 0;margin: 0;}
+html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
+.wrapper{
+	background: #F4F7FA ;
+}
+.header{
+	height: .96rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding:  0 .3rem;
+	margin-bottom: .2rem ;
+	background: #FFFFFF;
+}
+.header-aside{
+	width: .3rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.header-aside img{
+	height: .4rem;
+}
+.header-text{
+	font-size: .36rem;
+	color: #000000 ;
+}
+.main{
+	height: calc(100% - 2.1rem);
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+.main-one{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 1.5rem;
+	background: #FFFFFF;
+	margin-bottom: .2rem;
+}
+.one-lift{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 .3rem;
+}
+.one-lift img{
+	height: .36rem;
+}
+.content-top{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	margin-bottom: .04rem;
+}
+.content-text{
+	font-size: .32rem;
+	color: #2B2B2B ;
+	font-weight: 600;
+	margin-right: .2rem;
+}
+.content-news{
+	font-size: .32rem;
+	color: #2B2B2B ;
+}
+.content-word{
+	font-size: .28rem;
+	color: #2B2B2B ;
+	height: .8rem ;
+	line-height: .4rem;
+	overflow: hidden;
+}
+.one-right{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 .3rem;
+}
+.one-right img{
+	height: .4rem;
+}
+.main-two{
+	height: 2.6rem;
+	background: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: .2rem;
+}
+.two-lift{
+	height: 2rem;
+	width: 2rem;
+	overflow: hidden;
+	margin: 0 .3rem;
+}
+.two-lift img{
+	width: 100%;
+}
+.two-right{
+	height: 2rem;
+}
+.two-text{
+	font-size: .28rem;
+	color: #232323 ;
+	height: .8rem;
+	line-height: .4rem;
+	overflow: hidden;
+	margin-bottom: .08rem;
+}
+.two-news{
+	font-size: .22rem;
+	color: #9B9B9B  ;
+	margin-bottom: .3rem;  
+}
+.two-box{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-right: .3rem;
+}
+.two-word{
+	font-size: .28rem;
+	color: #F55353  ;
+}
+.two-hezi{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	width: 1.9rem;
+	height: .48rem;
+	border: 1px solid #9B9B9B ;
+	border-radius: .06rem;
+	
+}
+.hezi-text{
+	font-size: .32rem;
+	color: #C9C9C9 ;
+}
+.hezi-news{
+	font-size: .28rem;
+	color: #2B2B2B ;
+}
+.main-three{
+	height: 2rem;
+	background: #FFFFFF;
+	margin-bottom: .2rem;	
+}
+.three-top{
+	height: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid#D8D8D8 ;
+	margin: 0 .3rem;
+}
+.three-text{
+	font-size: .28rem;
+	color: #131313 ;
+}
+.three-news{
+	font-size: .28rem;
+	color: #767676  ;
+}
+.three-bottom{
+	height: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 0 .3rem;
+}
+.three-word{
+	font-size: .28rem;
+	color: #131313 ;
+}
+.three-bottom img{
+	height: .36rem ;
+}
+.main-four{
+	height: 3rem;
+	background: #FFFFFF;
+	
+}
+.four-top{
+	height: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	margin: 0 .3rem;
+	border-bottom: 1px solid #D8D8D8 ;
+}
+.four-text{
+	font-size: .28rem;
+	color: #2B2B2B ;
+	margin-right: .3rem;
+}
+.four-news{
+	font-size: .28rem;
+	color: #F55353  ;
+}
+.four-content{
+	height: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	margin: 0 .3rem;
+	border-bottom: 1px solid #D8D8D8 ;
+}
+.content-lift{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.content-lift img{
+	height: .36rem;
+	margin-right: .36rem ;
+}
+.four-word{
+	font-size: .28rem;
+	color: #131313  ;
+	flex: 1;
+}
+.content-right{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.content-right img{
+	height: .4rem;
+}
+.four-bottom{
+	height: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	margin: 0 .3rem;
+}
+.bottom{
+	height: 1rem;
+	background: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+.bottom-text{
+	font-size: .28rem;
+	color: #989898  ;
+	margin-left: .4rem;
+}
+.bottom-news{
+	font-size: .28rem;
+	color: #F55353  ;
+	flex: 1;
+	margin-left: .1rem;
+}
+.bottom-word{
+	font-size: .32rem;
+	color: #FFFFFF  ;
+	background: #F55353 ;
+	width: 2.3rem;
+	height: 1rem;
+	text-align: center;
+	line-height: 1rem;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,96 @@
+*{padding: 0;margin: 0;}
+html,body,.wrapper{width: 100%;height: 100%;}
+.wrapper{
+	background: #F4F7FA  ;
+}
+.header{
+	height: .96rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 .3rem ;
+	background: #FFFFFF  ;
+	margin-bottom: .2rem;
+}
+.header-aside{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 1.1rem;
+}
+.header-aside img{
+	height: .36rem;
+}
+.header-text{
+	font-size: .36rem;
+	color: #141414 ;
+}
+.header-news{
+	font-size: .24rem;
+	color: #F55353 ;
+}
+.main-one{
+	height: .8rem;
+	display: flex;
+	align-items: center;
+	margin: 0 0 .2rem .3rem;
+}
+.one-text{
+	font-size: .36rem;
+	color: #141414 ;
+}
+span{
+	font-size: .36rem;
+	color: #F55353 ;
+}
+.main-two{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	height: .8rem;
+	margin: 0 .3rem .4rem .3rem;
+	background: #FFFFFF;
+	border-radius: .1rem;
+}
+.two-text{
+	width: 1.4rem;
+	font-size: .28rem;
+	color: #4A4A4A ;
+	margin: 0 .3rem;
+}
+.name{
+	font-size: .28rem;
+	color: #9B9B9B ;
+	height: .8rem;
+	width: 5.6rem;
+	border: 0;
+}
+.main-three{
+	height: .8rem;
+	background: #F55353 ;
+	width: 6.6rem;
+	margin: .8rem .3rem .2rem .3rem;
+	border-radius: .1rem;
+}
+.three-text{
+	font-size: .28rem;
+	color: #FFFFFF ;
+	text-align: center;
+	line-height: .8rem;
+}
+.four-text{
+	font-size: .2rem;
+	color: #F55353 ;
+	height: .6rem;
+	line-height: .3rem;
+	overflow: hidden;
+	margin: 0 .3rem;
+}
+.{
+	
+}
+.{
+	
+}
+
+

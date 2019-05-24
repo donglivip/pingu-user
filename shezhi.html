@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/shezhi.css"/>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside mui-action-back">
+					<img src="img/youjian.png"/>
+				</div>
+				<div class="header-text">设置</div>	
+				<div class="header-aside"></div>
+			</div>
+			<div class="main">
+				<div class="main-one">
+					<div class="one-lift">
+						<img src="img/945421.jpg"/>
+					</div>
+					<div class="one-content">
+						<div class="content-text">易烊千玺的梨涡</div>
+					</div>
+					<div class="one-right">
+						<img src="img/you-hui.png"/>
+					</div>
+				</div>
+				<!--<div class="main-two">
+					<div class="two-top">
+						<div class="two-text">问题反馈</div>
+						<img src="img/you-hui.png"/>
+					</div>
+					<div class="two-top">
+						<div class="two-text">关于</div>
+						<img src="img/you-hui.png"/>
+					</div>
+				</div>-->
+			</div>
+			<div class="bottom" @click="tuichu">
+				<div class="bottom-text">退出当前账户</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		new Vue({
+			el:'.wrapper',
+			data:{
+				
+			},
+			methods:{
+				tuichu:function(){
+					localStorage.clear()
+					this.opennew('denglu')
+				},
+				opennew:function(index){
+					mui.openWindow({
+						url:index+'.html',
+						id:index
+					})
+				}
+			},
+			mounted:function(){
+				
+			}
+		})
+	</script>
+</html>

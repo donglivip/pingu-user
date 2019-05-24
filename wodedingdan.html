@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/wodedingdan.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-aside back">
+					<img src="img/youjian.png" />
+				</div>
+				<div class="header-text">我的订单</div>
+				<div class="header-aside"></div>
+			</div>
+			<div class="main">
+				<div class="main-one">
+					<div class="one-text one-news" myid='-1' smOrPayStatus='1'>全部订单 </div>
+					<div class="one-text" myid='1' smOrPayStatus='1'>已完成</div>
+					<div class="one-text" myid='3' smOrPayStatus='1'>待发货</div>
+					<div class="one-text" myid='4' smOrPayStatus='1'>待收货</div>
+					<!--<div class="one-text" myid='5' smOrPayStatus='1'>待评价</div>-->
+					<div class="one-text" myid='6'>待退款</div>
+				</div>
+				<div class="main-box">
+
+				</div>
+			</div>
+			<!--取消订单-->
+			<div class="cancel">
+				<div class="cancel-inner">
+					<textarea placeholder="请输入取消原因" class="cancentext"></textarea>
+					<input type="number" placeholder="请输入退款金额" class="cancenprice" />
+					<div class="btn-box">
+						<div class="btn quxiao">
+							取消
+						</div>
+						<div class="btn cancelok">
+							确定
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--评价订单-->
+			<div class="rating">
+				<div class="rating-inner">
+					<div class="star-box">
+						<img src="img/star.png" class="starimg" />
+						<img src="img/star.png" class="starimg" />
+						<img src="img/star.png" class="starimg" />
+						<img src="img/star.png" class="starimg" />
+						<img src="img/star.png" class="starimg" />
+					</div>
+					<textarea placeholder="请输入评价内容" class="ratingtext"></textarea>
+					<!--<div class="upimg">
+						<img src="img/addimg.png" class="uimg" />
+						<img src="img/addimg.png" class="uimg" />
+						<img src="img/addimg.png" class="uimg" />
+						<img src="img/addimg.png" class="uimg" />
+					</div>-->
+					<div class="btn-box">
+						<div class="btn rquxiao">
+							取消
+						</div>
+						<div class="btn ratinglok">
+							确定
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			var myid = '',
+				id = '',
+				shopid = '',
+				starindex = 5,
+				smCeImglist = ['', '', '', ''],
+				imgindex = 0,
+				price=0
+			$('.uimg').click(function() {
+				imgindex = $('.uimg').index(this)
+				upload()
+			})
+			$('.back').click(function(){
+				mui.openWindow({
+					url:'wode.html'
+				})
+			})
+			function upload() {
+				var that = this
+				var btnArray = [{
+					title: "照相机"
+				}, {
+					title: "相册"
+				}]; //选择按钮  1 2 3
+				plus.nativeUI.actionSheet({
+					title: "请选择",
+					cancel: "取消",
+					buttons: btnArray
+				}, function(e) {
+					var index = e.index;
+					switch(index) {
+						case 1:
+							camera();
+							break;
+						case 2:
+							album();
+							break;
+					}
+				});
+			}
+
+			function camera() {
+				//				相机
+				var that = this
+				var cmr = plus.camera.getCamera();
+				cmr.captureImage(function(p) {
+					//成功
+					plus.io.resolveLocalFileSystemURL(p, function(entry) {
+						var img_name = entry.name;
+						var img_path = entry.toLocalURL();
+						$('.touxaing').attr('src', img_path)
+						upload_img(img_path)
+					}, function(e) {
+						alert("读取拍照文件错误：" + e.message);
+					});
+
+				}, function(e) {
+					alert("失败：" + e.message);
+				}, {
+					filename: '_doc/camera/',
+					index: 1
+				});
+			}
+
+			function album() {
+				//				相册
+				var that = this
+				plus.gallery.pick(function(path) {
+					$('.touxaing').attr('src', path)
+					upload_img(path);
+				}, function(e) {
+					alert("取消选择图片");
+				}, {
+					filter: "image"
+				});
+			}
+
+			function upload_img(p) {
+				var thats = this
+				var img = new Image();
+				img.src = p; // 传过来的图片路径在这里用。
+				img.onload = function() {
+					var that = this;
+					//生成比例 
+					var w = that.width,
+						h = that.height,
+						scale = w / h;
+					w = 480 || w; //480  你想压缩到多大，改这里
+					h = w / scale;
+
+					//生成canvas
+					var canvas = document.createElement('canvas');
+					var ctx = canvas.getContext('2d');
+					$(canvas).attr({
+						width: w,
+						height: h
+					});
+					ctx.drawImage(that, 0, 0, w, h);
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/insertCommodityEvaluateImage",
+						async: true,
+						dataType: 'json',
+						data: {
+							imgStr: canvas.toDataURL('image/jpeg', 1 || 0.8)
+						},
+						success: function(res) {
+							if(res.status == 200) {
+								$('.uimg').eq(imgindex).attr('src',canvas.toDataURL('image/jpeg', 1 || 0.8))
+								smCeImglist[imgindex] = res.data
+							} else {
+								alert(res.data)
+							}
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
+						}
+					});
+				}
+			}
+			$(".one-text").click(function() {
+				$(".one-text").removeClass("one-news")
+				$(this).addClass("one-news")
+				var myid = $(this).attr('myid'),
+				smOrPayStatus = $(this).attr('smOrPayStatus'),
+				myurl02=''
+				if(myid==6){
+					myurl02="/user/selectUserOrderRefund"
+				}else{
+					myurl02="/user/selectUserOrder"
+				}
+				$.ajax({
+					type: "post",
+					url: myurl + myurl02,
+					async: true,
+					dataType: 'json',
+					data: {
+						smUserId: localStorage.getItem('id'),
+						state: myid,
+						smOrPayStatus:smOrPayStatus
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							$(".main-box").html('')
+							for(var i in res.data) {
+								$(".main-box").append(`
+										<div class="main-two" ordeid='${res.data[i].smOrderId}'>
+											<div class="two-top">
+												<div class="top-text">订单编号 : ${res.data[i].smOrderId}</div>
+											</div>
+											<div class="two-content">
+												<div class="content-lift">
+													<img src="${res.data[i].smCoDefaultImg}"/>
+												</div>
+												<div class="content-text">
+												${res.data[i].smCoName}
+												</div>
+											</div>
+											<div class="two-bottom" style='display:${(res.data[i].smOrReturnPay==1||myid==6||res.data[i].smOrStyle==2)?"none":"flex"}'>
+												<div class="bottom-text gocancel" orderid='${res.data[i].smOrderId}' price='${res.data[i].smOdPrice}'>取消/退款</div>
+												<div class="bottom-text wuliu" style="display:${res.data[i].smOrStatus==4?'black':'none'}" myid='${res.data[i].smOrExpress}'>查看物流</div>
+												<div class="bottom-news ordeok" style="display:${res.data[i].smOrStatus==4?'black':'none'}" orderid='${res.data[i].smOrderId}'>确认收货</div>
+												<div class="bottom-news gorating" style="display:${res.data[i].smOrStatus==1?'black':'none'}" orderid='${res.data[i].smOrderId}' shopid='${res.data[i].smCommodityId}'>评价</div>
+											</div>
+										</div>
+									`)
+							}
+						} else {
+							alert(res, msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			//			完成订单
+			$(".main-box").on('click', '.ordeok', function() {
+				var id = $(this).attr('orderid')
+
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/userAutoCompletion",
+					async: true,
+					data: {
+						smOrderId: id
+					},
+					dataType: 'json',
+					success: function(res) {
+						if(res.status == 200) {
+							$(".one-text").eq(myid - 1).click()
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+				if(e.preventDefault) {
+					e.preventDefault();
+				} else {
+					window.event.returnValue == false;
+				}
+			})
+			//			跳转页面-订单详情
+			$(".main-box").on('click', '.main-two', function() {
+				localStorage.setItem('orderid', $(this).attr('ordeid'))
+				mui.openWindow({
+					url: 'dingdanxiangqing.html',
+					id: 'dingdanxiangqing'
+				})
+			})
+			//			改变星级
+			$('.star-box').on('click', '.starimg', function() {
+				var myindex = $('.starimg').index(this) + 1
+				starindex = myindex
+				$('.star-box').html('')
+				for(var i = 0; i < myindex; i++) {
+					$('.star-box').append(`
+						<img src="img/star.png" class="starimg"/>
+					`)
+				}
+				for(var i = 0; i < 5 - myindex; i++) {
+					$('.star-box').append(`
+						<img src="img/starn.png" class="starimg"/>
+					`)
+				}
+			})
+			//			复制物流单号
+			$('.main-box').on('click', '.wuliu', function() {
+				var Url2 = $(this).attr('myid')
+				var oInput = document.createElement('input');
+				oInput.value = Url2;
+				document.body.appendChild(oInput);
+				oInput.select(); // 选择对象
+				document.execCommand("Copy"); // 执行浏览器复制命令
+				oInput.className = 'oInput';
+				oInput.style.display = 'none';
+				alert('物流单号复制成功');
+				if(e.preventDefault) {
+					e.preventDefault();
+				} else {
+					window.event.returnValue == false;
+				}
+			})
+			//			打开评价
+			$('.main-box').on('click', '.gorating', function() {
+				id = $(this).attr('orderid')
+				shopid = $(this).attr('shopid')
+				$('.rating').css('display', 'flex')
+				if(e.preventDefault) {
+					e.preventDefault();
+				} else {
+					window.event.returnValue == false;
+				}
+			})
+			//			取消评价
+			$('.rquxiao').click(function() {
+				$('.rating').hide()
+			})
+			//			提交评价
+			$('.ratinglok').click(function() {
+				$('.rating').hide()
+				var ratingtext = $('.ratingtext').val()
+				if(ratingtext == '') {
+					alert('信息填写不完整')
+					return false;
+				}
+				var ajaxjson = {
+					smOrderId: id,
+					smUserId: localStorage.getItem('myid'),
+//					smCommodityId: shopid,
+					smCeGrade: starindex,
+					smCeResult: ratingtext
+//					smCeImgOne: smCeImglist[0],
+//					smCeImgTwo: smCeImglist[1],
+//					smCeImgThree: smCeImglist[2],
+//					smCeImgFour: smCeImglist[3]
+				}
+//				if(smCeImglist[0]==''){
+//					delete ajaxjson.smCeImgOne
+//				}
+//				if(smCeImglist[1]==''){
+//					delete ajaxjson.smCeImgTwo
+//				}
+//				if(smCeImglist[2]==''){
+//					delete ajaxjson.smCeImgThree
+//				}
+//				if(smCeImglist[3]==''){
+//					delete ajaxjson.smCeImgFour
+//				}
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/userAutomaticPraise",
+					async: true,
+					data: ajaxjson,
+					dataType: 'json',
+					success: function(res) {
+						if(res.status == 200) {
+							$(".one-text").eq(0).click()
+							$('.rating').hide()
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			//			初始化点击
+			$(".one-text").eq(0).click()
+			//			取消点击
+			$(".quxiao").click(function() {
+				$('.cancel').hide()
+			})
+			//			提交取消
+			$(".cancelok").click(function() {
+				var cancentext = $('.cancentext').val()
+				var cancenprice = $('.cancenprice').val()
+				var price=$(this).attr('price')
+				if(cancentext == '' || cancenprice == '') {
+					alert('信息填写不完整')
+					return false;
+				}
+				if(cancenprice>price){
+					alert('退款金额超出订单价格')
+					return false;
+				}
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/userRefund",
+					async: true,
+					data: {
+						smOrderId: id,
+						smOrReturnRemarks: cancentext,
+						smOrReturnPrice: cancenprice
+					},
+					dataType: 'json',
+					success: function(res) {
+						if(res.status == 200) {
+							$(".one-text").eq(myid - 1).click()
+							$(".cancel").hide()
+							plus.nativeUI.toast('提交成功')
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						console.log(err)
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			//			取消订单
+			$(".main-box").on('click', '.gocancel', function() {
+				id = $(this).attr('orderid')
+				price=$(this).attr('price')
+				$('.cancel').css('display', 'flex')
+				if(e.preventDefault) {
+					e.preventDefault();
+				} else {
+					window.event.returnValue == false;
+				}
+			})
+			$('.header-aside').click(function() {
+				mui.openWindow({
+					url: 'wode.html',
+					id: 'wode'
+				})
+			})
+		})
+	</script>
+
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/wodedizhi.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<div class="header-cebian mui-action-back">
+					<img src="img/youjian.png" />
+				</div>
+				<div class="header-text">我的地址</div>
+				<div class="header-cebian jump" myid='xinzengdizhi'>
+					<img src="img/jia.png" />
+				</div>
+			</div>
+			<div class="main">
+
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			addEventListener('shua',function(){
+				myajax()
+			})
+			//查询用户地址
+			function myajax() {
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/selectSmUserAddress",
+					async: true,
+					dataType: 'json',
+					data: {
+						smUserId: localStorage.getItem('id')
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							$('.main').html('')
+							for(var i in res.data) {
+								$(".main").append(`
+								<div class="main-box">
+				            		<div class="main-top">
+				            			<div class="top-text">维修地址：</div>
+				            			<div class="top-news">${res.data[i].smUaProvince} ${res.data[i].smUaResult}</div>
+				            		</div>
+				            		<div class="main-content">
+				            			<div class="content-text">联系人：${res.data[i].smUaName}</div>
+				            			<div class="content-text">${res.data[i].smUaPhone}</div>
+				            		</div>	
+				            		<div class="main-bottom">
+				            			<div class="bottom-box moren" myid='${res.data[i].smUserAddressId}'>
+				            				<img src="img/xuanzhong.png" style='display:${res.data[i].smUaIsDefault==1?"block":"none"}'/>
+				            				<img src="img/xuanze.png" style='display:${res.data[i].smUaIsDefault==1?"none":"block"}'/>
+				            				<div class="bottom-text">设为默认地址</div>
+				            			</div>
+				            			<div class="bottom-box">
+				            				<div class="bottom-news shanchu" myid='${res.data[i].smUserAddressId}'>删除</div>
+				            				<div class="bottom-news bianji" myid='${res.data[i].smUserAddressId}'>编辑</div>
+				            			</div>
+				            		</div>           		
+				            	</div>
+							`)
+							}
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			}
+			myajax()
+			//编辑地址
+			$(".main").on('click', '.bianji', function() {
+				localStorage.setItem('bianjidizhiid', $(this).attr('myid'))
+				mui.openWindow({
+					url: 'bianjidizhi.html',
+					id: 'bianjidizhi'
+				})
+			})
+			//绑定删除事件
+			$(".main").on('click', '.shanchu', function() {
+				var myid = $(this).attr('myid')
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/updateSmUserAddress",
+					async: true,
+					dataType: 'json',
+					data: {
+						smUserAddressId: myid,
+						smUaIsDelete: 1
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							myajax()
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			$(".main").on('click', '.moren', function() {
+				var myid = $(this).attr('myid')
+				//编辑和删除用户地址
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/updateSmUserAddress",
+					async: true,
+					dataType: 'json',
+					data: {
+						smUserAddressId: myid,
+						smUaIsDefault: 1,
+						smUserId: localStorage.getItem('id')
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							myajax()
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			//跳转页面
+			$(".jump").click(function() {
+				var jump = $(this).attr('myid')
+				mui.openWindow({
+					url: "" + jump + ".html",
+					id: jump
+				})
+			})
+		})
+	</script>
+
+</html>

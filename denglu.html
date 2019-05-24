@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title></title>
+    <script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="css/denglu.css"/> 
+    <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<!--头-->
+		<div class="header">
+			<div class="header-cebian"></div>
+			<div class="header-text">登录</div>
+		    <div class="header-cebian"></div>						
+		</div>
+		<!--中间主体-->
+		<div class="main">
+			<div class="main-one">
+				<input type="text"  placeholder="请输入手机号" class="phone shouji"/>
+			</div>			
+			<div class="main-one">
+				<input type="password"  placeholder="密码"  class="phone mima"/>
+			</div>
+			<div class="main-two">
+				<div class="two-text">登录</div>
+			</div>
+			<div class="main-three ">
+				<div class="three-text">注册</div>
+				<!--<div class="three-text">忘记密码？ </div>-->
+			</div>
+		</div>
+	</div>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			
+			$(".main-two").click(function(){
+				var shouji=$('.shouji').val()
+				var mima=$('.mima').val()
+				if (shouji=='') {
+					alert("手机号不能为空")
+					return					
+				} 
+				if (mima=='') {
+					alert("密码不能为空")
+					return			
+				}
+				$.ajax({
+					type:"post",
+					url:myurl+"/user/userLogin",
+					async:true,
+					dataType:'json',
+					data:{
+						phone:shouji,
+						password:mima
+					},
+					success:function(res){
+						if (res.status==200) {
+							localStorage.setItem('id',res.data.smUserId)//用户ID
+							localStorage.setItem('Phone',res.data.smUsPhone)//手机号
+							localStorage.setItem('name',res.data.smUsNickname)//昵称
+							localStorage.setItem('xingbie',res.data.smUsSex)//性别
+							localStorage.setItem('shenfen',res.data.smUsCardNo)//身份证号
+							localStorage.setItem('zhifubao',res.data.smUsAliCode)//支付宝账户
+							localStorage.setItem('zhifuxingming',res.data.smUsAliName)//支付宝姓名
+							localStorage.setItem('dengji',res.data.smGradeRuleId)//代理等级
+							localStorage.setItem('weixin',res.data.smUsWechatCode)//微信账户
+							localStorage.setItem('weixinxingming',res.data.smUsWechatName)//微信姓名
+							localStorage.setItem('smUsHeadimg',res.data.smUsHeadimg)//头像
+							mui.openWindow({
+								url:'index.html',
+								id:'index'
+							})
+						} else{
+							alert(res.msg)
+						}
+					},
+					error:function(err){
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			$('.three-text').click(function(){
+				mui.openWindow({
+								url:'zhuce.html',
+								id:'zhuce'
+							})
+			})
+		})
+	</script>
+</body>
+</html>
