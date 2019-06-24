@@ -224,6 +224,7 @@
 						if(res.status == 200) {
 							$(".main-box").html('')
 							for(var i in res.data) {
+								res.data[i].smCoDefaultImg=JSON.parse(res.data[i].smCoDefaultImg)
 								$(".main-box").append(`
 										<div class="main-two" ordeid='${res.data[i].smOrderId}'>
 											<div class="two-top">
@@ -231,14 +232,14 @@
 											</div>
 											<div class="two-content">
 												<div class="content-lift">
-													<img src="${res.data[i].smCoDefaultImg}"/>
+													<img src="${res.data[i].smCoDefaultImg[0]}"/>
 												</div>
 												<div class="content-text">
 												${res.data[i].smCoName}
 												</div>
 											</div>
 											<div class="two-bottom" style='display:${(res.data[i].smOrReturnPay==1||myid==6||res.data[i].smOrStyle==2)?"none":"flex"}'>
-												<div class="bottom-text gocancel" orderid='${res.data[i].smOrderId}' price='${res.data[i].smOdPrice}'>取消/退款</div>
+												<div class="bottom-text gocancel" orderid='${res.data[i].smOrderId}' price='${res.data[i].smOrPrice}'>取消/退款</div>
 												<div class="bottom-text wuliu" style="display:${res.data[i].smOrStatus==4?'black':'none'}" myid='${res.data[i].smOrExpress}'>查看物流</div>
 												<div class="bottom-news ordeok" style="display:${res.data[i].smOrStatus==4?'black':'none'}" orderid='${res.data[i].smOrderId}'>确认收货</div>
 												<div class="bottom-news gorating" style="display:${res.data[i].smOrStatus==1?'black':'none'}" orderid='${res.data[i].smOrderId}' shopid='${res.data[i].smCommodityId}'>评价</div>
@@ -269,7 +270,8 @@
 					dataType: 'json',
 					success: function(res) {
 						if(res.status == 200) {
-							$(".one-text").eq(myid - 1).click()
+							plus.nativeUI.toast('已收货')
+							$(".one-text").eq(1).click()
 						} else {
 							alert(res.msg)
 						}
@@ -379,7 +381,7 @@
 					dataType: 'json',
 					success: function(res) {
 						if(res.status == 200) {
-							$(".one-text").eq(0).click()
+							$(".one-text").eq(1).click()
 							$('.rating').hide()
 						} else {
 							alert(res.msg)
@@ -400,7 +402,6 @@
 			$(".cancelok").click(function() {
 				var cancentext = $('.cancentext').val()
 				var cancenprice = $('.cancenprice').val()
-				var price=$(this).attr('price')
 				if(cancentext == '' || cancenprice == '') {
 					alert('信息填写不完整')
 					return false;
@@ -421,7 +422,7 @@
 					dataType: 'json',
 					success: function(res) {
 						if(res.status == 200) {
-							$(".one-text").eq(myid - 1).click()
+							$(".one-text").eq(4).click()
 							$(".cancel").hide()
 							plus.nativeUI.toast('提交成功')
 						} else {

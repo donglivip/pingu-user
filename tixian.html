@@ -68,14 +68,13 @@
 				},
 				myajax: function() {
 					var that = this
-					//					plus.nativeUI.showWaiting()
 					if(this.price == '') {
 						return false;
 					}
-//					if(this.price <= 20) {
-//						alert('最少提现20元')
-//						return false;
-//					}
+					if(this.price <= 20) {
+						alert('最少提现20元')
+						return false;
+					}
 					//				提现
 					$.ajax({
 						type: 'post',

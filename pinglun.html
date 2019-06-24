@@ -67,7 +67,10 @@
 						async: true,
 						dataType: 'json',
 						data: {
-							smCommodityId: localStorage.getItem('shangpinxiangqingid')
+							smCommodityId: localStorage.getItem('shangpinxiangqingid'),
+							province: '江苏',
+							smMerchantId: localStorage.getItem('storeinfoid'),
+							smUserId: localStorage.getItem('id')
 						},
 						success: function(res) {
 							if(res.status == 200) {

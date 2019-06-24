@@ -41,10 +41,11 @@
 						if(res.status == 200) {
 							$(".main").html('')
 							for(var i in res.data) {
+								res.data[i].smCoDefaultImg=JSON.parse(res.data[i].smCoDefaultImg)
 								$(".main").append(`
 									<div class="main-one">
 										<div class="one-lift">
-											<img src="${res.data[i].smCoDefaultImg}"/>
+											<img src="${res.data[i].smCoDefaultImg[0]}"/>
 										</div>
 										<div class="one-right">
 											<div class="one-text">${res.data[i].smCoName}</div>

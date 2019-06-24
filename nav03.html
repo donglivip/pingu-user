@@ -58,14 +58,14 @@
 				<div class="adver-main">
 					<div class="swiper-container" v-if="goodsType2id==''">
 					    <div class="swiper-wrapper">
-					        <div class="swiper-slide" v-for="val in navdata.type" @click="openshop(val.smMerchantId)">
+					        <div class="swiper-slide" v-for="val in navdata.type" @click="openshop(val.smMerchantId)" v-if="val!='null'">
 								<img :src="myurl + val.smMeShopImg" >
 							</div>
 					    </div>
 					    <!-- Add Pagination -->
 					    <div class="swiper-pagination"></div>
 					</div>
-					<div class="main-one" v-for='val in navdata.normal' @click="openshop(val.smMerchantId)" v-if="goodsType2id==''">
+					<div class="main-one" v-for='val in navdata.normal' @click="openshop(val.smMerchantId)" v-if="goodsType2id==''&&val!=null">
 						<div class="one-lift">
 							<img :src="val.smMeShopImg" />
 						</div>
@@ -73,7 +73,7 @@
 							<div class="one-text">{{val.smMeShopName}}</div>
 						</div>
 					</div>
-					<div class="main-one" v-for='val in navdata' @click="openshop(val.smMerchantId)" v-if="goodsType2id!=''">
+					<div class="main-one" v-for='val in navdata' @click="openshop(val.smMerchantId)" v-if="goodsType2id!=''"  v-if="val!='null'">
 						<div class="one-lift">
 							<img :src="val.smMeShopImg" />
 						</div>
@@ -96,19 +96,19 @@
 				<!--选择地区-->
 				<div class="botton-nav adresschange" v-show="nav02boo" @click="nav02show">
 					<div class="bottom-main">
-<!-- 							<div class="bottom-tab" @click="change('','全部地区')" >
-								全部地区
+<!-- 							<div class="bottom-tab" @click="change('','地区分类')" >
+								地区分类
 							</div> -->
 							<div class="bottom-tab" @click="change(val.smAdvertisementAddressId,val.smAaArea)" v-for="(val,index) in adressdata" >
 								{{val.smAaProvice}}{{val.smAaCity}}{{val.smAaArea}}
 							</div>
 					</div>
 				</div>
-				<!--全部市场-->
+				<!--市场分类-->
 				<div class="botton-nav" v-show="nav03boo" @click="nav03show">
 					<div class="bottom-main">
-	<!-- 					<div class="bottom-tab" @click="changenav03('','全部市场')" :class="marketIdid==''?'active02':''">
-							全部市场
+	<!-- 					<div class="bottom-tab" @click="changenav03('','市场分类')" :class="marketIdid==''?'active02':''">
+							市场分类
 						</div> -->
 						<div class="bottom-tab" v-for="val in nav03" @click="changenav03(val.smAdvertisementMarketId,val.smAmName)" :class="marketIdid==val.smAdvertisementMarketId?'active02':''">
 							{{val.smAmName}}
@@ -137,13 +137,13 @@
 		new Vue({
 			el: '.wrapper',
 			data: {
-				goodsTypename: '全部行业',
+				goodsTypename: '行业分类',
 				goodsTypeid: '',
-				goodsType2name: '全部分类',
+				goodsType2name: '产品分类',
 				goodsType2id: '',
-				regionname: '全部地区',
+				regionname: '地区分类',
 				regionId: '',
-				marketIdname: '全部市场',
+				marketIdname: '市场分类',
 				marketIdid: '',
 				adressdata: '',
 				myindex: 0,
@@ -168,7 +168,7 @@
 					})
 				},
 				nav04show: function() {
-					if(this.marketIdname == '全部市场') {
+					if(this.marketIdname == '市场分类') {
 						mui.toast('请先选择市场')
 					} else {
 						this.nav04boo = !this.nav04boo
@@ -261,7 +261,7 @@
 					});
 				},
 				nav02show: function() {
-					if(this.goodsTypename=='全部行业'){
+					if(this.goodsTypename=='行业分类'){
 						mui.toast('请先选择行业')
 					}else{
 						this.nav02boo = !this.nav02boo
@@ -289,7 +289,7 @@
 						}
 					});
 					this.marketIdid = ''
-					this.marketIdname = '全部市场'
+					this.marketIdname = '市场分类'
 //					获取地区下的广告
 					$.ajax({
 						type: "post",
@@ -306,7 +306,7 @@
 					});
 				},
 				nav03show: function() {
-					if(this.regionname=='全部地区'){
+					if(this.regionname=='地区分类'){
 						mui.toast('请先选择地区')
 					}else{
 						this.nav03boo = !this.nav03boo

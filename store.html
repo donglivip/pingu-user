@@ -14,7 +14,16 @@
 			height: .4rem;
 			width: auto!important;
 		}
+		.main{overflow: hidden;}
 		.red{border-bottom: 1px solid red;color: red;}
+		.shop-box{height: calc(100% - 2.1rem);overflow-y: scroll;}
+		.jianjie{
+			margin: 0 auto;
+		}
+		.index .title{white-space: inherit;height: .9rem;}
+		.backimg{position: fixed;top: 0;left: 0;width: 100%!important;height: 3rem!important;filter: blur(10px);}
+		.header,.main{position: relative;z-index: 999999;margin: 0;}
+		.store-top{color: #FFFFFF!important;}
 	</style>
 
 	<body>
@@ -22,15 +31,17 @@
 			<!--头部-->
 			<div class="header">
 				<div class="aside mui-action-back">
-					<img src="img/youjian.png" class="back" />
+					<img src="img/y  bai.png" class="back" />
 				</div>
 				<div class="head-main" style="background: #FFFFFF;font-size: .35rem;">
 					店铺详情
 				</div>
 				<div class="aside">
-					<!--<img src="img/qq.png" class="back" />-->
+					<img src="img/star.png" class="back" id="add"/>
+					<img src="img/starn.png" class="back" id="delete"/>
 				</div>
 			</div>
+			<img src="img/youjian.png" class="backimg avatar" />
 			<div class="main big-main">
 				<!--顶部店铺信息-->
 				<div class="store-top">
@@ -41,7 +52,7 @@
 				</div>
 				<!--中间店铺分类-->
 				<div class="nav-box">
-
+					
 				</div>
 				<!--商品-->
 				<div class="shop-box">
@@ -56,6 +67,59 @@
 	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(function() {
+			// 添加收藏
+			$('#delete').click(function(){
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/insertSmUserCollection",
+					async: true,
+					dataType: 'json',
+					data: {
+						smCommodityId: localStorage.getItem('storeinfoid'),
+						smUserId: localStorage.getItem('id'),
+						smUcCreateName: localStorage.getItem('id'),
+						type:2
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							$('#delete').hide()
+							$('#add').show()
+							var shoucang=plus.webview.getWebviewById('shoucangliebiao')
+							mui.fire(shoucang,'myajax')
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			var shopdata=''
+			// 取消收藏
+			$('#add').click(function(){
+				$.ajax({
+					type: "post",
+					url: myurl + "/user/deleteSmUserCollection",
+					async: true,
+					dataType: 'json',
+					data: {
+						smUserCollectionId: shopdata.smMeCreateName
+					},
+					success: function(res) {
+						if(res.status == 200) {
+							$('#add').hide()
+							$('#delete').show()
+						} else {
+							alert(res.msg)
+						}
+					},
+					error: function(err) {
+						alert("网络连接失败，请稍后重试")
+					}
+				});
+			})
+			var detail=''
 //			根据店铺id查询店铺信息
 			$.ajax({
 				type: "post",
@@ -63,14 +127,23 @@
 				async: true,
 				dataType: 'json',
 				data: {
-					smMerchantId: localStorage.getItem('storeinfoid')
+					smMerchantId: localStorage.getItem('storeinfoid'),
+					smUserId: localStorage.getItem('id')
 				},
 				success: function(res) {
 					if(res.status == 200) {
+						shopdata=res.data
 						$('.avatar').attr('src',res.data.smMeShopImg)
 						localStorage.setItem('smMeShopImg',res.data.smMeShopImg)
 						$('.name').html(res.data.smMeShopName)
 						localStorage.setItem('smMeShopName',res.data.smMeShopName)
+						if(res.data.smMeUpdateName==2){
+							$('#add').hide()
+							$('#delete').show()
+						}else{
+							$('#add').show()
+							$('#delete').hide()
+						}
 					} else {
 						alert(res.msg)
 					}
@@ -90,12 +163,16 @@
 				},
 				success: function(res) {
 					if(res.status == 200) {
+						$(".nav-box").append(`
+							<div class="nav-tab" myid='jianjie'>企业简介</div>
+						`)
 						for(var i in res.data) {
 							$(".nav-box").append(`
 								<div class="nav-tab" myid='${res.data[i].smCommodityTypeId}'>${res.data[i].smCtResult}</div>
 							`)
 						}
-						$(".nav-tab").eq(0).click()
+						
+						$(".nav-tab").eq(1).click()
 					} else {
 						alert(res.msg)
 					}
@@ -110,44 +187,59 @@
 				$(this).addClass('red')
 				var myid = $(this).attr('myid')
 				localStorage.setItem('smShopTypeId',myid)
-				$.ajax({
-					type: "post",
-					url: myurl + "/user/selectSmCommodityIdSmCommodity",
-					async: true,
-					dataType: 'json',
-					data: {
-						smCommodityTypeId: myid,
-						smMerchantId: localStorage.getItem('storeinfoid'),
-						smUserId:localStorage.getItem('myid')
-					},
-					success: function(res) {
-						if(res.status == 200) {
-							$(".shop-box").html('')
-							for(var i in res.data) {
-								$(".shop-box").append(`
-									<div class="shop-tab jump" myid='${res.data[i].smCommodityId}'>
-										<div class="shopimg-box">
-											<img src="${res.data[i].smCoDefaultImg}" class="shop-img" />
-										</div>
-										<div class="title">${res.data[i].smCoName}</div>
-										<div class="price">
-											<div class="money">￥ ${res.data[i].smCoDefaultPrice}</div>
-											<div class="join">
-												购买
+				if(myid=='jianjie'){
+					<!-- 企业简介 -->
+					if(shopdata.smMeIntroduce==null||shopdata.smMeIntroduce=='null'){
+						$(".shop-box").html(`<div class='jianjie'>暂无企业简介</div>`)
+					}else{
+						$(".shop-box").html(`<div class='jianjie'>${shopdata.smMeIntroduce}</div>`)
+					}
+					
+					
+				}else{
+					$.ajax({
+						type: "post",
+						url: myurl + "/user/selectSmCommodityIdSmCommodity",
+						async: true,
+						dataType: 'json',
+						data: {
+							smCommodityTypeId: myid,
+							smMerchantId: localStorage.getItem('storeinfoid'),
+							smUserId:localStorage.getItem('myid')
+						},
+						success: function(res) {
+							if(res.status == 200) {
+								$(".shop-box").html('')
+								for(var i in res.data) {
+									res.data[i].smCoDefaultImg=JSON.parse(res.data[i].smCoDefaultImg)
+									$(".shop-box").append(`
+										<div class="shop-tab jump" myid='${res.data[i].smCommodityId}'>
+											<div class="shopimg-box">
+												<img src="${res.data[i].smCoDefaultImg[0]}" class="shop-img" />
+											</div>
+											<div class="title">
+												<strong style="display:${res.data[i].smCoActivity!=null?'inline-bock':'none'}">${res.data[i].smCoActivity}</strong>
+												${res.data[i].smCoName}
+											</div>
+											<div class="price">
+												<div class="money">￥ ${res.data[i].smCoDefaultPrice}</div>
+												<div class="join">
+													购买
+												</div>
 											</div>
 										</div>
-									</div>
-								`)
+									`)
+								}
+							} else {
+								alert(res.msg)
 							}
-						} else {
-							alert(res.msg)
+							
+						},
+						error: function(err) {
+							alert("网络连接失败，请稍后重试")
 						}
-						
-					},
-					error: function(err) {
-						alert("网络连接失败，请稍后重试")
-					}
-				});
+					});
+				}
 			})
 			//跳转到商品详情
 			$(".shop-box").on('click', '.shop-tab', function() {

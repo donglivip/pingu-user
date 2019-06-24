@@ -10,6 +10,9 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 	justify-content: space-between;
 	padding:  0 .3rem;
 }
+.qidong{position: fixed;top: 0;left: 0;width: 100%!important;height: 100%;z-index: 999999;margin: 0!important;display: none;}
+.qidong img{height: 100%;width: 100%;}
+.swiper-slide{width: 100!important;}
 .header-aside{
 	width: .3rem;
 	display: flex;
@@ -71,15 +74,18 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	padding:  .1rem;
+	background: #FFFFff;
+	border-radius: .2rem;
+	margin: .2rem;
 }
 .three-box{
-	width: 3.5rem;
+	width: 2.1rem;
 	margin: .05rem;
 }
 .three-box img{
 	height: 2.1rem;
-	width: 3.5rem;
+	width: 2.1rem;
 	border-radius:.05rem ;
 }
 .three-text{
@@ -108,6 +114,9 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 	align-items: center;
 	justify-content: flex-start;
 	padding: 0 .3rem;
+	background: #FFFFFF;
+	margin:.1rem .2rem;
+	border-radius: .1rem;
 }
 .four-lift{
 	height: 2.1rem;
@@ -130,14 +139,17 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 	font-size: .32rem;
 	color: #F55353;
 	margin-top: .7rem;
+	align-items: flex-end;
+	justify-content: space-between;
 }
 .four-bottom span{margin-right: .4rem;}
 .four-text{
-	font-size: .28rem;
+	font-size: .3rem;
 	color: #141414 ;
 	height: 1rem;
-	line-height: .5rem;
+	line-height: .6rem;
 	overflow: hidden;
+	font-weight: bold;
 }
 .four-box{
 	display: flex;
@@ -161,6 +173,7 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
+	background: #FFFFFF;
 }
 .bottom-box{
 	display: flex;
@@ -193,8 +206,10 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 }
 .new{
 	display: flex;
-	border-top: 5px solid ghostwhite;
-	border-bottom: 5px solid ghostwhite;
+	background: #FFFFFF;
+	margin: 0 .2rem;
+	border-radius: .5rem;
+	border: 2px solid lightpink;
 }
 .new img{
 	height: .8rem;

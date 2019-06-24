@@ -19,6 +19,21 @@
 			font-size: .3rem;
 			width: 1rem;
 		}
+		.main-inner{
+			display: flex;flex-wrap: wrap;
+		}
+		.main-one{
+			width: 50%;
+		}
+		.one-text{display: flex;justify-content: space-between;}
+		.one-lift{height: 3rem;}
+		.header{background: #F55353;color: #FFFFFF;}
+		.type{font-size: .24rem;text-align: center;height: .7rem;display: flex;border-bottom: 1px solid gainsboro;}
+		.type span{flex: 1;text-align: center;line-height: .7rem;}
+		.one-title{font-size: .24rem;margin: .1rem;}
+		.one-title strong{background: red;color: #FFFFff;padding:0 .2rem;border-radius: .2rem;}
+		.price{color: #F55353;font-size: .3rem;}
+		.dizhi{color: #999999;font-size: .2rem;}
 	</style>
 	<body>
 		<div class="wrapper">
@@ -32,7 +47,11 @@
 				<div class="header-aside goto">GO</div>
 			</div>
 			<div class="main">
-				
+				<div class="type">
+					<span id="xiao">销量排行</span>
+					<span id="jia">价格排行</span>
+				</div>
+				<div class="main-inner"></div>
 			</div>
 		</div>
 	</body>
@@ -41,31 +60,67 @@
 	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(function(){
+			$("#xiao").click(function(){
+				myajax('1')
+			})
+			$("#jia").click(function(){
+				myajax('2')
+			})
 			$(".goto").click(function(){
+				myajax('')
+			})
+			function myajax(type){
 				var search=$(".search").val()
 				if (search=='') {
 					alert("搜索内容不能为空")
 					return
+				}
+				var ajaxjson={
+					smMeShopName:search,
+					smUserId:localStorage.getItem('id'),
+					typea:2,
+					typeb:1
+				}
+					
+				if(type==''){
+					delete ajaxjson.typea
+					delete ajaxjson.typeb
+				}else if(type==1){
+					delete ajaxjson.typeb
+				}else if(type==2){
+					delete ajaxjson.typea
 				}
 				$.ajax({
 					type:"post",
 					url:myurl+"/user/selectSmMerchantByComm",
 					async:true,
 					dataType:'json',
-					data:{
-						smMeShopName:search
-					},
+					data:ajaxjson,
 					success:function(res){
 						if (res.status==200) {
-							$(".main").html('')
+							$(".main-inner").html('')
 							for (var i in res.data) {
-								$(".main").append(`
+								res.data[i].smCoDefaultImg=JSON.parse(res.data[i].smCoDefaultImg)
+								$(".main-inner").append(`
 									<div class="main-one" myid='${res.data[i].smCommodityId}'>
 										<div class="one-lift">
-											<img src="${res.data[i].smCoDefaultImg}"/>
+											<img src="${res.data[i].smCoDefaultImg[0]}"/>
 										</div>
 										<div class="one-right">
-											<div class="one-text">${res.data[i].smCoName}</div>			
+											<div class="one-title">
+												<strong style="display:${res.data[i].smCoActivity!=null?'inline-bock':'none'}">${res.data[i].smCoActivity}</strong>
+												${res.data[i].smCoName}
+											</div>			
+										</div>
+										<div class="one-right" style='height:auto'>
+											<div class="one-text">
+												<span class='dizhi'>销量:${res.data[i].smCoSalesVolume}</span>
+												<span class='dizhi'>邮费:${res.data[i].smCoIsFreeShipping==1?'包邮':'不包邮'}</span>
+											</div>		
+											<div class="one-text" style='height:auto'>
+												<span class='price'>￥${res.data[i].smCoDefaultPrice}</span>
+												<span class='dizhi'>${res.data[i].smCoUpdateName}</span>
+											</div>		
 										</div>
 									</div>
 								`)
@@ -85,7 +140,7 @@
 						id: "shangpinxiangqing"
 					})
 				})
-			})
+			}
 		})
 	</script>
 </html>

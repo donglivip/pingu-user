@@ -6,7 +6,6 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
-
 		<link rel="stylesheet" type="text/css" href="css/shenqing.css" />
 		<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="https://cdn.bootcss.com/framework7/1.6.5/css/framework7.ios.min.css" rel="stylesheet">
@@ -24,7 +23,7 @@
 				<div class="header-aside mui-action-back">
 					<img src="img/youjian.png" />
 				</div>
-				<div class="header-text">申请高级会员</div>
+				<div class="header-text">申请分销商</div>
 				<div class="header-aside"></div>
 			</div>
 			<div class="main">
@@ -37,13 +36,13 @@
 						<input type="text" placeholder="申请人QQ号码" v-model="smAmQq" />
 					</div>
 					<div class="input-text" @click="layuichange">
-						<input type="text" placeholder="申请会员等级" readonly="readonly" v-model="smMmName" />
+						<input type="text" placeholder="申请分销商等级" readonly="readonly" v-model="smMmName" />
 						<span>请选择</span>
 						<img src="img/you-hui.png" />
 					</div>
 
 					<div class="title">
-						上传店铺LOGO
+						上传店铺门招
 					</div>
 					<img src="img/addimg.png" class="add" @click="upload(0)"/>
 				</div>
@@ -53,10 +52,16 @@
 					</div>
 					<img src="img/yz.png" class="sf"  @click="upload(1)"/>
 				</div>
+				<div class="main-box">
+					<div class="title">
+						填写所在地区
+					</div>
+					<input type="text" placeholder="请填写您所在市场" class="shi"/>
+				</div>
 				<div class="layui" v-show="layuiboo" @click="layuichange">
 					<div class="layui-inner">
 						<div class="layui-tab" v-for="val in shopdata" @click="havedengji(val.smMerchantMemberId,val.smMmName)">
-							{{val.smMmName}}
+							<!-- {{val.smMmName}} -->分销商
 						</div>
 					</div>
 				</div>
@@ -64,7 +69,7 @@
 					提交申请
 				</div>
 				</div>
-				<div class="input-text">
+				<div class="input-text" style="margin: 0;width: 100%;">
 					<input type="text" placeholder="商户所在地" id="location" />
 				</div>
 			</div>
@@ -97,6 +102,22 @@
 				gisubmit: function() {
 					var that = this
 					//					提交申请
+					if(that.smAmQq==''){
+						alert('qq不能为空')
+						return false
+					}
+					if(that.smAmShopLogo==''){
+						alert('店铺门招不能为空')
+						return false
+					}
+					if(that.smAmBusinessLicenesImg==''){
+						alert('营业执照不能为空')
+						return false
+					}
+					if(that.smMerchantName==''){
+						alert('店铺名称不能为空')
+						return false
+					}
 					$.ajax({
 						type: "post",
 						url: myurl + "/user/inserSmApplyMember",
@@ -107,7 +128,7 @@
 							smShopTypeId: localStorage.getItem('smShopTypeId'),
 							smUserId: localStorage.getItem('id'),
 							smAmQq: that.smAmQq,
-							smAmAddress: $('#location').val(),
+							smAmAddress: $('#location').val() + $('.shi').val(),
 							smAmShopLogo: that.smAmShopLogo,
 							smAmBusinessLicenesImg: that.smAmBusinessLicenesImg,
 							smAmCreateName: localStorage.getItem('id'),
@@ -115,21 +136,8 @@
 							smMerchantName: that.smMerchantName
 						},
 						success: function(res) {
-							console.log(JSON.stringify( {
-							smMerchantMemberId: that.smMerchantMemberId,
-							smShopTypeId: localStorage.getItem('smShopTypeId'),
-							smUserId: localStorage.getItem('id'),
-							smAmQq: that.smAmQq,
-							smAmAddress: $('#location').val(),
-							smAmShopLogo: that.smAmShopLogo,
-							smAmBusinessLicenesImg: that.smAmBusinessLicenesImg,
-							smAmCreateName: localStorage.getItem('id'),
-							smMerchantId: localStorage.getItem('storeinfoid'),
-							smMerchantName: that.smMerchantName
-						}))
-							console.log(JSON.stringify(res))
-							if(res.status == 200) {
-								alert('已为您提交申请')
+							if(res.data == 1) {
+								alert('已为您提交申请,分销商购买商品物流费用自理！')
 								mui.back()
 							} else {
 								alert(res.msg)
@@ -145,7 +153,8 @@
 				},
 				havedengji: function(id, name) {
 					this.smMerchantMemberId = id
-					this.smMmName = name
+					// this.smMmName = name
+					this.smMmName = '分销商'
 					this.layuichange
 				},
 				myajax: function() {

@@ -18,35 +18,17 @@
 				<div class="header-cebian mui-action-back">
 					<img src="img/youjian.png" />
 				</div>
-				<div class="header-text">编辑地址</div>
+				<div class="header-text">新增物流</div>
 				<div class="header-cebian"></div>
 			</div>
 			<div class="main">
 				<div class="main-one">
-					<div class="one-text">联系人</div>
-					<input type="text" placeholder="丁丁" class="phone name" />
-				</div>
-				<div class=" main-one ">
-					<div class="one-text ">手机号码</div>
-					<input type="number " placeholder="1784756289 " class="phone shouji" />
-				</div>
-				<div class="main-two ">
-					<div class="two-left ">
-						<div class="two-text ">收货地址</div>
-					</div>
-					<div class="two-content ">
-						<div class="content-top">
-							<input type="text " placeholder="小区/街道大厦/学校名称 " class="quyuming" id="location" readonly="readonly" />
-							<img src="img/you-hui.png " />
-						</div>
-						<div class="content-bottom">
-							<input type="text " placeholder="楼号/门牌号等详细地址 " class="xiangxi " />
-						</div>
-					</div>
+					<div class="one-text">物流名称</div>
+					<input type="text" placeholder="德邦" class="phone name" />
 				</div>
 			</div>
 			<div class="bottom">
-				<div class="bottom-text">确认编辑</div>
+				<div class="bottom-text">确认添加</div>
 			</div>
 		</div>
 	</body>
@@ -59,45 +41,25 @@
 	<script src="js/cityPicker.js"></script>
 	<script type="text/javascript">
 		$(function() {
-			$(".name").val(localStorage.getItem('dizhiname'))
-			$(".shouji").val(localStorage.getItem('dizhiphone'))
-			$(".xiangxi").val(localStorage.getItem('dizhidetail'))
 			$(".bottom").click(function() {
 				var name = $(".name").val() //联系人
-				var shouji = $(".shouji").val() //手机号码
-				var xiangxi = $(".xiangxi").val() //门牌号等详细地址
-				var quyuming = $(".quyuming").val() //小区/街道大厦/学校名称
 				if(name == '') {
-					alert("联系人不能为空")
-					return
-				}
-				if(shouji == '') {
-					alert("手机号码不能为空")
-					return
-				}
-				if(xiangxi == '') {
-					alert("详细地址不能为空")
+					alert("物流名称不能为空")
 					return
 				}
 				$.ajax({
 					type: "post",
-					url: myurl + "/user/updateSmUserAddress",
+					url: myurl + "/user/insertUserLogistices",
 					async: true,
 					dataType: 'json',
 					data: {
-						smUserAddressId: localStorage.getItem('bianjidizhiid'),
-						smUaName: name,
-						smUaPhone: shouji,
-						smUaResult: xiangxi,
-						smUaCreateName: localStorage.getItem('id'),
-						smUaProvince: quyuming,
-						smUaIsDefault: 1,
-						smUaCity:'',
-						smUaArea:''
+						smSulName: name,
+						smUserId:localStorage.getItem('id')
 					},
 					success: function(res) {
 						if(res.status == 200) {
-							alert("编辑成功")
+							var xiadanyemian=plus.webview.getWebviewById("wuliuguanli");
+							mui.fire(xiadanyemian,'myajax',{});
 							mui.back()
 						} else {
 							alert(res.msg)

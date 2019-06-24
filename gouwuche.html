@@ -37,7 +37,7 @@
 								<img src="img/ok.png" v-if="item.selection==1" />
 							</div>
 							<div class="one-content">
-								<img :src="item.smCoDefaultImg" />
+								<img :src="item.smCoDefaultImg | tu" />
 							</div>
 							<div class="one-right">
 								<div class="one-top">{{item.smCoName}}</div>
@@ -250,6 +250,11 @@
 			},
 			mounted: function() {
 				this.myajax()
+			},
+			filters:{
+				tu:function(value){
+					return JSON.parse(value)[0]
+				}
 			}
 		})
 		//跳转页面-分类

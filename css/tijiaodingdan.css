@@ -14,6 +14,12 @@ html,body,.wrapper{width: 100%;height: 100%;overflow: hidden;}
 	margin-bottom: .2rem;
 	padding: 0 .3rem;
 }
+select{
+	width: 6.3rem;
+	height: .6rem;
+	display: block;
+	margin: .2rem auto;
+}
 .header-cebian{
 	display: flex;
 	align-items: center;

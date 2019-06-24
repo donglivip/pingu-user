@@ -78,19 +78,19 @@
 						<div class="three-text">账户余额</div>
 						<img src="img/you-hui.png" />
 					</div>
-					<!--<div class="three-box">
-						<div class="three-text">在线客服</div>
+					<div class="three-box jump" myid='share'>
+						<div class="three-text">分享好友</div>
 						<img src="img/you-hui.png" />
-					</div>-->
+					</div>
 					<div class="three-box jump" myid='renzhengzhongxin'>
 						<div class="three-text">认证中心</div>
 						<img src="img/you-hui.png" />
 					</div>
-					<!--<div class="three-box">
-						<div class="three-text">帮助</div>
+					<div class="three-box jump" myid='wuliuguanli'>
+						<div class="three-text">物流管理</div>
 						<img src="img/you-hui.png" />
-					</div>-->
-					<a class="three-box" href="tel:18952168237">
+					</div>
+					<a class="three-box" href="tel:4006010751">
 						<div class="three-text">客服</div>
 						<img src="img/you-hui.png" />
 					</a>
@@ -106,7 +106,7 @@
 					<div class="bottom-news">店铺</div>
 				</div>-->
 				<div class="bottom-box jump" myid='shoucangliebiao'>
-					<img src="img/fenlei%202.png" >
+					<img src="img/sss.png" >
 					<div class="bottom-news">收藏</div>
 				</div>
 				<div class="bottom-box jump" myid='gouwuche'>
@@ -120,6 +120,7 @@
 			</div>
 		</div>
 	</body>
+	<link rel="stylesheet" type="text/css" href="css/mui.min.css"/>
 	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
@@ -137,10 +138,29 @@
 				//跳转页面
 				$(".jump").click(function() {
 					var jump = $(this).attr('myid')
-					mui.openWindow({
-						url: "" + jump + ".html",
-						id: jump
-					})
+					if(jump=='zhanghuyue'){
+						 mui.prompt('请输入密码','请输入密码','请输入密码',['取消','确认'],function (e) {
+							if(e.index==1){
+								if(localStorage.getItem('mima')!=e.value){
+									alert('密码错误')
+								}else{
+									mui.openWindow({
+										url: "" + jump + ".html",
+										id: jump
+									})
+								}
+							}else{
+								
+							}
+							
+						},'div')
+					}else{
+						mui.openWindow({
+							url: "" + jump + ".html",
+							id: jump
+						})
+					}
+					
 				})
 				$.ajax({
 					type: "post",
