@@ -408,12 +408,7 @@
 				document.addEventListener('myajax', function() {
 					that.myajax()
 				})
-				$('.main').on('click','img',function(){
-					var src=$(this).attr('src')
-					plus.nativeUI.previewImage([
-						src
-					]);
-				})
+				
 				this.myajax()
 			},
 			updated:function(){
@@ -423,6 +418,12 @@
 					},
 					loop:true
 				});
+				$('.main').on('click','img',function(){
+					var src=$(this).attr('src')
+					plus.nativeUI.previewImage([
+						src
+					]);
+				})
 			}
 		})
 	</script>

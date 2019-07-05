@@ -35,7 +35,7 @@
 			<div class="cancel">
 				<div class="cancel-inner">
 					<textarea placeholder="请输入取消原因" class="cancentext"></textarea>
-					<input type="number" placeholder="请输入退款金额" class="cancenprice" />
+					<input type="number" placeholder="请输入退款金额" class="cancenprice"/>
 					<div class="btn-box">
 						<div class="btn quxiao">
 							取消
@@ -239,7 +239,7 @@
 												</div>
 											</div>
 											<div class="two-bottom" style='display:${(res.data[i].smOrReturnPay==1||myid==6||res.data[i].smOrStyle==2)?"none":"flex"}'>
-												<div class="bottom-text gocancel" orderid='${res.data[i].smOrderId}' price='${res.data[i].smOrPrice}'>取消/退款</div>
+												<div class="bottom-text gocancel" orderid='${res.data[i].smOrderId}' price='${res.data[i].smOrPrice}' state='${res.data[i].smOrStatus}'>取消/退款</div>
 												<div class="bottom-text wuliu" style="display:${res.data[i].smOrStatus==4?'black':'none'}" myid='${res.data[i].smOrExpress}'>查看物流</div>
 												<div class="bottom-news ordeok" style="display:${res.data[i].smOrStatus==4?'black':'none'}" orderid='${res.data[i].smOrderId}'>确认收货</div>
 												<div class="bottom-news gorating" style="display:${res.data[i].smOrStatus==1?'black':'none'}" orderid='${res.data[i].smOrderId}' shopid='${res.data[i].smCommodityId}'>评价</div>
@@ -439,6 +439,11 @@
 			$(".main-box").on('click', '.gocancel', function() {
 				id = $(this).attr('orderid')
 				price=$(this).attr('price')
+				state=$(this).attr('state')
+				$('.cancenprice').val(price)
+				if(state==3){
+					$('.cancenprice').attr('readonly','readonly')
+				}
 				$('.cancel').css('display', 'flex')
 				if(e.preventDefault) {
 					e.preventDefault();

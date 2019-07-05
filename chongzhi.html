@@ -100,12 +100,14 @@
 						},
 						success: function(res) {
 							if(that.status == 1) {
+								console.log(JSON.stringify(res.data[0]));
 								plus.payment.request(that.channel[0], res.data[0], function(result) {
 									plus.nativeUI.toast('充值成功')
 								}, function(error) {
 									plus.nativeUI.alert("支付失败：" + error.code);
 								});
 							} else {
+								console.log(JSON.stringify(res.data[0]));
 								plus.payment.request(that.channel[1], res, function(result) {
 									plus.nativeUI.toast('充值成功')
 								}, function(error) {

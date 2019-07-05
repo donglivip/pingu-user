@@ -11,16 +11,14 @@
 	</head>
 	<style type="text/css">
 		.swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{height: 5px;display: flex;justify-content: center;}
+		.swiper-container{background: #FFFFFF;margin: 0 .2rem .2rem;border-radius: .2rem;}
 		.swiper-slide{padding-bottom: .3rem;}
 		.main-one{background: #FFFFFF;margin:  .2rem;width: calc(100% - .4rem);border-radius: .25rem;}
-		.wei{z-inde:999;position: fixed;right: .2rem;bottom: 1.3rem;width: .5rem;height: .5rem;border: 1px solid #FFFFFF;background: rgba(255,255,255,.5);border-radius: 50%;display: flex;align-items: center;justify-content: center;}
+		.wrapper{background: ghostwhite;background-size: 100% 100%;overflow: hidden;}
 		.wei img{height: .4rem;width: .4rem;border-radius: 50%;}
 	</style>
 	<body>
 		<div class="wrapper">
-			<div class="wei">
-				<img src="img/wquan.png" >
-			</div>
 			<div class="header">
 				<div class="header-aside city">
 					未知
@@ -28,8 +26,8 @@
 				<div class="header-text jump" myid='sousuo'>
 					<input type="text" placeholder="搜索商品" readonly="readonly" />
 				</div>
-				<div class="header-aside goqq">
-					<img src="img/kefu.png" />
+				<div class="header-aside wei">
+					<img src="img/wquan.png" >
 				</div>
 			</div>
 			<div class="main">
@@ -51,8 +49,8 @@
 				</div>
 				<!-- 新闻 -->
 				<div class="new">
-					<span class="red">同城</span>
-					<span>头条</span>
+					<span class="red">行业</span>
+					<span>资讯</span>
 					<div class="new-box">
 
 					</div>
@@ -77,6 +75,10 @@
 					<img src="img/sss.png" />
 					<div class="bottom-news">收藏</div>
 				</div>
+				<div class="bottom-box goqq">
+					<img src="img/kefu.png" />
+					<div class="bottom-news">消息</div>
+				</div>
 				<div class="bottom-box jump" myid='gouwuche'>
 					<img src="img/gouwudai.png" />
 					<div class="bottom-news">购物车</div>
@@ -95,10 +97,35 @@
 	<script type="text/javascript">
 		$(function() {
 			function plusReady() {
+				function checkArguments(){  
+					var args= plus.runtime.arguments; 
+					 
+					if(args){  
+						alert(args)
+						// 处理args参数，如直达到某新页面等  
+						localStorage.setItem('storeinfoid',args.substr(9,args.length))
+						mui.openWindow({
+							url:'store.html',
+							id:'store'
+						})
+					}  
+				}  
+				// 处理从后台恢复  
+				document.addEventListener('newintent',function(){  
+					console.log("addEventListener: newintent");  
+					checkArguments();  
+				},false);  
+				checkArguments()
 				$('.wei').click(function(){
 					mui.openWindow({
 						url: 'share.html',
 						id: 'share'
+					})
+				})
+				$('#go').click(function(){
+					mui.openWindow({
+						url: 'denglu.html',
+						id: 'denglu'
 					})
 				})
 				$('.goqq').click(function(){
@@ -108,11 +135,13 @@
 						window.location.href='http://wpa.qq.com/msgrd?v=3&uin='+localStorage.getItem('qq')+'&site=在线客服&menu=yes'
 					}
 				})
-				plus.navigator.setStatusBarBackground('#F55353');
+				plus.navigator.setStatusBarBackground('#89359a');
 				if (localStorage.getItem('id') == undefined || localStorage.getItem('id') == null) {
-					mui.openWindow({
-						url: 'denglu.html',
-						id: 'denglu'
+					$('.qidong').show()
+					new Swiper('.qidong', {
+						pagination: {
+							el: '.swiper-pagination'
+						}
 					})
 				}
 				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
@@ -308,7 +337,7 @@
 							$(".main-three").append(
 								`
 								<div class="three-box" myid="${res.data[i].smMerchantId}">
-									<img src="${res.data[i].smMeShopImg}" />
+									<img src="${myurl + res.data[i].smMeShopImg}" />
 									<div class="three-text">${res.data[i].smMeShopName}</div>
 								</div>
 							`
@@ -332,23 +361,29 @@
 			//获取首页为你推荐
 			$.ajax({
 				type: "post",
-				url: myurl + "/user/selectSmMerchantRecommend",
+				url: myurl + "/user/selectSmMerchantByComm",
 				async: true,
+				data:{
+					smMeShopName:'',
+					smUserId:localStorage.getItem('id'),
+					typea:2,
+					typeb:1
+				},
 				dataType: 'json',
 				success: function(res) {
 					if (res.status == 200) {
 						for (var i in res.data) {
 							$(".main-box").append(
 								`
-								<div class="main-four" myid="${res.data[i].smMerchantId}">
+								<div class="main-four" myid="${res.data[i].smCommodityId}">
 									<div class="four-lift">
-										<img src="${res.data[i].smMeShopImg}" />
+										<img src="${JSON.parse(res.data[i].smCoDefaultImg)[0]}" />
 									</div>
 									<div class="four-right">
-										<div class="four-text">${res.data[i].smMeShopName}</div>
+										<div class="four-text">${res.data[i].smCoName}</div>
 										<div class="four-bottom">
-											<!-- <span style='flex:1'>${res.data[i].smMeAddress}</span> -->
-											<span style='font-size:.2rem;color:#666666'>销量：${res.data[i].smMeCommodityNum}</span>
+											<span style='flex:1'>￥${res.data[i].smCoDefaultPrice}</span>
+											<span style='font-size:.2rem;color:#666666'>销量：${res.data[i].smCoSalesVolume}</span>
 										</div>
 									</div>
 								</div>
@@ -365,10 +400,10 @@
 				}
 			});
 			$(".main-box").on('click', '.main-four', function() {
-				localStorage.setItem('storeinfoid', $(this).attr('myid'))
+				localStorage.setItem('shangpinxiangqingid', $(this).attr('myid'))
 				mui.openWindow({
-					url: "store.html",
-					id: "store"
+					url: "shangpinxiangqing.html",
+					id: "shangpinxiangqing"
 				})
 			})
 			//跳转页面

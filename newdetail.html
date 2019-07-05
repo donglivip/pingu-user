@@ -25,11 +25,11 @@
 					</div>
 				</div>
 				<div class="detail">
-					<div class="box" v-for="val in detaildata" @click="opendetail(val.smNewsId)">
+					<div class="box">
 						<div class="title">
-							{{val.smNeTitle}}
+							{{detaildata.smNeTitle}}
 						</div>
-						<div class="text" v-html="val.smNeResult" style="height: 1.2rem;overflow: hidden;">
+						<div class="text" v-html="detaildata.smNeResult">
 							
 						</div>
 						<div class="bottom">
@@ -37,7 +37,7 @@
 								
 							</div>
 							<div class="time">
-								{{val.smNeCreateTimeString}}
+								{{detaildata.smNeCreateTimeString}}
 							</div>
 						</div>
 					</div>
@@ -59,41 +59,15 @@
 				myindex:0
 			},
 			methods:{
-				opendetail:function(id){
-					localStorage.setItem('newid', id)
-					mui.openWindow({
-						url:'newdetail.html'
-					})
-				},
-				myajax:function(){
-					var that=this
-					$.ajax({
-						type: "post",
-						url: myurl + "/user/querySmNewsTypeHomePage",
-						async: true,
-						dataType: 'json',
-						success: function(res) {
-							if(res.status == 200) {
-								that.topdata=res.data
-								that.topchange(res.data[0].smNewsTypeId,0)
-							} else {
-								alert(res.msg)
-							}
-						},
-						error: function(err) {
-							
-						}
-					});
-				},
 				topchange:function(id,index){
 					var that=this
 					that.myindex=index
 					$.ajax({
 						type: "post",
-						url: myurl + "/user/querySmNewsByType",
+						url: myurl + "/user/querySmNewsById",
 						async: true,
 						data:{
-							smNewsTypeId:id
+							smNewsId:localStorage.getItem('newid')
 						},
 						dataType: 'json',
 						success: function(res) {
@@ -110,7 +84,7 @@
 				}
 			},
 			mounted:function(){
-				this.myajax()
+				this.topchange()
 			}
 		})
 	</script>

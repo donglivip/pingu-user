@@ -41,7 +41,7 @@
 							<img :src="val.smMeShopImg"/> {{val.smMeShopName}}
 						</div>
 						<div class="shop-tab" v-for="item in val.list">
-							<img :src="item.smCoDefaultImg" class="avatar"/>
+							<img :src="item.smCoDefaultImg | smMeShopImg" class="avatar"/>
 							<div class="shop-name">
 								{{item.smCoName}}
 							</div>
@@ -396,6 +396,10 @@
 						return '积分支付'
 					}
 
+				},
+				smMeShopImg:function(value){
+					// return JSON.parse(value)[0]
+					return value
 				}
 			}
 		})

@@ -8,5 +8,6 @@ html,body,.wrapper{width: 100%;height: 100%;overflow: hidden;}
 .detail{height: calc(100% - .8rem);overflow-y: scroll;}
 .box{background: #FFFFFF;margin: .2rem;}
 .title{font-size: .4rem;line-height: .6rem;height: .6rem;overflow: hidden;text-indent: .2rem;font-weight: 600;}
-.text{margin:.1rem .3rem;font-size: .22rem;}
+.text{margin:.1rem .3rem;font-size: .22rem;overflow-x: hidden;box-sizing: border-box;}
+.text img{width: 100%!important;}
 .bottom{display: flex;justify-content: space-between;margin: .2rem;}

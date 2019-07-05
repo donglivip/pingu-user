@@ -13,10 +13,11 @@ html,body,.wrapper{width: 100%;height: 100%;}
 	margin-bottom: .1rem;
 }
 .header-aside{
-	width: .3rem;
+	width: .5rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	height: 100%;
 }
 .header-aside img{
 	height: .36rem;
