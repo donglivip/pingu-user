@@ -375,7 +375,7 @@
 						for (var i in res.data) {
 							$(".main-box").append(
 								`
-								<div class="main-four" myid="${res.data[i].smCommodityId}">
+								<div class="main-four" myid="${res.data[i].smCommodityId}" storeinfoid="${res.data[i].smCoCreateName}">
 									<div class="four-lift">
 										<img src="${JSON.parse(res.data[i].smCoDefaultImg)[0]}" />
 									</div>
@@ -401,6 +401,7 @@
 			});
 			$(".main-box").on('click', '.main-four', function() {
 				localStorage.setItem('shangpinxiangqingid', $(this).attr('myid'))
+				localStorage.setItem('storeinfoid', $(this).attr('storeinfoid'))
 				mui.openWindow({
 					url: "shangpinxiangqing.html",
 					id: "shangpinxiangqing"

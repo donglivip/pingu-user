@@ -90,6 +90,10 @@
 						<div class="three-text">物流管理</div>
 						<img src="img/you-hui.png" />
 					</div>
+					<div class="three-box down" >
+						<div class="three-text">下载商家端</div>
+						<img src="img/you-hui.png" />
+					</div>
 					<a class="three-box" href="tel:4006010751">
 						<div class="three-text">客服</div>
 						<img src="img/you-hui.png" />
@@ -135,6 +139,9 @@
 				if (localStorage.getItem('smUsHeadimg') != 'null'&&localStorage.getItem('smUsHeadimg') != null) {
 					$('#avatar').attr('src', myurl + localStorage.getItem('smUsHeadimg'))
 				}
+				$('.down').click(function(){
+					plus.runtime.openURL('https://www.pgyer.com/spWa')
+				})
 				//跳转页面
 				$(".jump").click(function() {
 					var jump = $(this).attr('myid')

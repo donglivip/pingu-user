@@ -3,7 +3,7 @@
     "id" : "H563F31EE", /*应用的标识*/
     "name" : "拼股商城", /*应用名称，程序桌面图标名称*/
     "version" : {
-        "name" : "1.0.0", /*应用版本名称*/
+        "name" : "1.0.2", /*应用版本名称*/
         "code" : 1
     },
     "description" : "", /*应用描述信息*/
@@ -92,7 +92,8 @@
         "NativeObj" : {
             "description" : "原生对象"
         },
-        "Payment" : {}
+        "Payment" : {},
+        "Share" : {}
     },
     "plus" : {
         "splashscreen" : {
@@ -239,6 +240,12 @@
                     "amap" : {
                         "appkey_ios" : "b409c4cfb602a2f87b42f65026214fcc",
                         "appkey_android" : "5190199e3335b10eb807953c6785b23d"
+                    }
+                },
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wxdcebe9e15d0a4eb8",
+                        "appsecret" : "c492ea1a289f8565dbc596c744c0082d"
                     }
                 }
             }
