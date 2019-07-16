@@ -109,7 +109,7 @@ body,
 
 .one-text {
 	font-size: .28rem;
-	color: #d86fed;
+	color: #F55353;
 	flex: 1;
 }
 
@@ -186,7 +186,7 @@ body,
 
 .content-news {
 	font-size: .28rem;
-	color: #d86fed;
+	color: #F55353;
 	margin-left: .12rem;
 }
 
@@ -199,7 +199,7 @@ body,
 .two-right {
 	height: 1rem;
 	width: 2.2rem;
-	background: #d86fed;
+	background: #F55353;
 	line-height: 1rem;
 	text-align: center;
 }
@@ -235,7 +235,7 @@ body,
 
 .bottom-text {
 	font-size: .2rem;
-	color: #d86fed;
+	color: #F55353;
 }
 
 .box {
@@ -244,7 +244,7 @@ body,
 	height: 16px;
 	margin-right: .1rem;
 	position: relative;
-	border: 1px solid #d86fed;
+	border: 1px solid #F55353;
 	border-radius: 50%;
 	overflow: hidden;
 }
@@ -263,7 +263,7 @@ body,
 	position: absolute;
 	top: 3px;
 	left: 3px;
-	background: #d86fed;
+	background: #F55353;
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;

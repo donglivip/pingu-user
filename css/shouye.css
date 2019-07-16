@@ -25,6 +25,20 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 	display: flex;
 	flex-wrap: wrap;
 }
+.goqq{
+	border: 1px solid gainsboro;
+	background: #FFFFFF;
+	border-radius: 50%;
+	width: 1.2rem!important;
+	height: 1.2rem;
+	position: relative;
+	bottom: .2rem;
+	box-shadow: 0 0 2px 2px ghostwhite;
+}
+.goqq img{
+	width: .5rem;
+	height: .5em!important;
+}
 .img-box{width: .9rem;height: .9rem;overflow: hidden;margin-bottom: .1rem;border-radius: 50%;}
 .img-box img{width: 100%;height: 100%;}
 .nav-box{width: 20%;display: flex;flex-direction: column;align-items: center;justify-content: center;margin: .1rem 0;font-size: .26rem;}
@@ -63,7 +77,7 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 .two-text{
 	font-size: .32rem;
 	color: #000000 ;
-	border-left: 3px solid #d86fed;
+	border-left: 3px solid #F55353;
 	padding-left: .12rem;
 	font-weight: 600  ;
 }
@@ -138,7 +152,7 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 .four-bottom{
 	display: flex;
 	font-size: .32rem;
-	color: #d86fed;
+	color: #F55353;
 	align-items: flex-end;
 	justify-content: space-between;
 }
@@ -181,6 +195,7 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	width: 1rem;
 }
 .bottom-box img{
 	height: .4rem;
@@ -188,7 +203,7 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 }
 .bottom-text{
 	font-size: .2rem;
-	color: #d86fed ;
+	color: #F55353 ;
 }
 .bottom-news{
 	font-size: .2rem;
@@ -201,7 +216,7 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 	height: .06rem;
 }
 .swiper-pagination-bullet-active{
-	background: #d86fed ;
+	background: #F55353 ;
 	width: .3rem;
 	height: .06rem;
 }
@@ -229,7 +244,7 @@ html,body,.wrapper{width:100% ;height: 100%;overflow: hidden;}
 	overflow: hidden;
 }
 .new span{font-size: .22rem;font-weight: 600;padding:.1rem;margin: .1rem 0;}
-.new .red{background: #d86fed;color: #FFFFFF;border-radius: .1rem;margin-left: .2rem;}
+.new .red{background: #F55353;color: #FFFFFF;border-radius: .1rem;margin-left: .2rem;}
 .new-box{margin-left: .2rem;}
 
 

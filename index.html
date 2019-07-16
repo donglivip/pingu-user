@@ -77,7 +77,6 @@
 				</div>
 				<div class="bottom-box goqq">
 					<img src="img/kefu.png" />
-					<div class="bottom-news">消息</div>
 				</div>
 				<div class="bottom-box jump" myid='gouwuche'>
 					<img src="img/gouwudai.png" />
@@ -135,13 +134,11 @@
 						window.location.href='http://wpa.qq.com/msgrd?v=3&uin='+localStorage.getItem('qq')+'&site=在线客服&menu=yes'
 					}
 				})
-				plus.navigator.setStatusBarBackground('#89359a');
+				plus.navigator.setStatusBarBackground('#F55353');
+				plus.runtime.setBadgeNumber(4)
 				if (localStorage.getItem('id') == undefined || localStorage.getItem('id') == null) {
-					$('.qidong').show()
-					new Swiper('.qidong', {
-						pagination: {
-							el: '.swiper-pagination'
-						}
+					mui.openWindow({
+						url:'./denglu.html'
 					})
 				}
 				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
@@ -254,7 +251,7 @@
 							on:{
 								slideChangeTransitionEnd:function(){
 									if(boo){
-										 localStorage.setItem('activeIndex',this.activeIndex)
+										localStorage.setItem('activeIndex',this.activeIndex)
 									}
 								},
 								click:function(e){
@@ -266,7 +263,10 @@
 								}
 							}
 						});
-						swiper.slideTo( localStorage.getItem('activeIndex'), 1000, false);
+						if(localStorage.getItem('activeIndex')!=undefined){
+							swiper.slideTo(localStorage.getItem('activeIndex'), 1000, false);
+						}
+						
 						boo=true
 					} else {
 						alert(res.msg)
